@@ -38,6 +38,7 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (err) {
+    console.error('Login error:', err && err.message ? err.message : err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -63,6 +64,7 @@ router.post('/change-password', authenticateToken, async (req, res) => {
 
     res.json({ message: 'Password updated successfully' });
   } catch (err) {
+    console.error('Change-password error:', err && err.message ? err.message : err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -82,6 +84,7 @@ router.post('/forgot-password', async (req, res) => {
     await User.updateOne({ _id: user._id }, { password: hashedPassword, firstLogin: false });
     res.json({ message: 'Password reset successfully' });
   } catch (err) {
+    console.error('Forgot-password error:', err && err.message ? err.message : err);
     res.status(500).json({ message: 'Server error' });
   }
 });

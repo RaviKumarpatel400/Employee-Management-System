@@ -83,6 +83,13 @@ app.get('/admin-dashboard', (req, res) => res.sendFile(path.join(__dirname, 'vie
 app.get('/manager-dashboard', (req, res) => res.sendFile(path.join(__dirname, 'views', 'manager.html')));
 app.get('/employee-dashboard', (req, res) => res.sendFile(path.join(__dirname, 'views', 'employee.html')));
 
+// Health Check
+app.get('/api/health', (req, res) => {
+  const state = mongoose.connection.readyState;
+  const states = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+  res.json({ db: states[state] || 'unknown' });
+});
+
 const PORT = process.env.PORT || 5000;
 if (require.main === module) {
   app.listen(PORT, () => {
