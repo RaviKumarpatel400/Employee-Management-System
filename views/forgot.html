@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password | EMS Portal</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* --- 1. GLOBAL STYLES --- */
+    :root {
+      --primary-navy: #0f172a;
+      --primary-orange: #ff9b44;
+      --text-dark: #334155;
+      --text-light: #64748b;
+      --white: #ffffff;
+      --danger: #ef4444;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      background-color: var(--white);
+    }
+
+    /* --- 2. LEFT SIDE: VISUALS --- */
+    .split-image {
+      flex: 1;
+      position: relative;
+      background-color: var(--primary-navy);
+      overflow: hidden;
+      display: none; /* Hidden on mobile */
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+    .slide.active { opacity: 0.6; }
+
+    .image-overlay {
+      position: absolute;
+      bottom: 50px;
+      left: 50px;
+      z-index: 10;
+      color: white;
+      max-width: 80%;
+    }
+    .image-overlay h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; }
+    .image-overlay p { font-size: 1rem; opacity: 0.9; }
+
+    /* --- 3. RIGHT SIDE: FORM --- */
+    .split-form {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: white;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 420px;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .header-text { margin-bottom: 30px; text-align: center; }
+    .header-text h2 { font-size: 1.8rem; color: var(--primary-navy); margin-bottom: 8px; }
+    .header-text p { color: var(--text-light); font-size: 0.9rem; }
+
+    .form-group { margin-bottom: 20px; }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .input-box { position: relative; }
+    
+    .input-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    input:focus { border-color: var(--primary-orange); box-shadow: 0 0 0 3px rgba(255, 155, 68, 0.1); }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary-navy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+    .btn:hover { background-color: #1e293b; transform: translateY(-2px); }
+
+    .back-link {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 0.9rem;
+    }
+    .back-link a {
+      color: var(--text-light);
+      text-decoration: none;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .back-link a:hover { color: var(--primary-orange); }
+
+    #fp-error { font-size: 0.9rem; min-height: 20px; margin-top: 10px; }
+
+    /* Responsive */
+    @media (min-width: 768px) { .split-image { display: block; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <div class="split-image">
+    <img src="https://images.unsplash.com/photo-1555421689-d68471e189f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="slide active" alt="Security">
+    <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="slide" alt="Digital">
+    
+    <div class="image-overlay">
+      <h1>Account Recovery</h1>
+      <p>Securely reset your password to regain access to the Employee Management System.</p>
+    </div>
+  </div>
+
+  <div class="split-form">
+    <div class="form-wrapper">
+      
+      <div class="header-text">
+        <div style="font-size: 3rem; color: var(--primary-orange); margin-bottom: 10px;">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h2>Reset Password</h2>
+        <p>Enter your email and new password details below.</p>
+      </div>
+
+      <form id="forgotForm">
+        <div class="form-group">
+          <label>Email Address</label>
+          <div class="input-box">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="fp-email" required placeholder="user@company.com">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>New Password</label>
+          <div class="input-box">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="fp-password" required minlength="6" placeholder="******">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <div class="input-box">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="fp-confirm" required minlength="6" placeholder="******">
+          </div>
+        </div>
+
+        <button type="submit" class="btn">Reset Password</button>
+        <p id="fp-error" style="color: var(--danger); text-align: center;"></p>
+      </form>
+
+      <div class="back-link">
+        <a href="/login"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    setInterval(() => {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }, 4000);
+  </script>
+
+  <script>
+    const form = document.getElementById('forgotForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('fp-email').value;
+      const password = document.getElementById('fp-password').value;
+      const confirm = document.getElementById('fp-confirm').value;
+      const error = document.getElementById('fp-error');
+      
+      error.textContent = '';
+      
+      // Visual validation feedback
+      if (password !== confirm) {
+        error.textContent = 'Passwords do not match';
+        return;
+      }
+      
+      // UI Loading state
+      const btn = form.querySelector('button');
+      const originalText = btn.textContent;
+      btn.textContent = 'Processing...';
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+
+      try {
+        const res = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, newPassword: password })
+        });
+        const data = await res.json();
+        
+        if (res.ok) {
+          alert('Password reset successfully. Please login.');
+          window.location.href = '/login';
+        } else if (res.status === 404) {
+          error.textContent = "Account doesn't exist";
+        } else {
+          error.textContent = data.message || 'Error resetting password';
+        }
+      } catch (err) {
+        error.textContent = 'Error resetting password. Check connection.';
+      } finally {
+        // Reset button state
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
+    });
+  </script>
+
+</body>
+</html>

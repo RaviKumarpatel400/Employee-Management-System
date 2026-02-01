@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Management System</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* --- THEME CONFIGURATION --- */
+    :root {
+      --primary-orange: #ff9b44;
+      --primary-hover: #e08332;
+      --sidebar-bg: #ffffff;
+      --sidebar-width: 240px;
+      --body-bg: #f7f7f7;
+      --text-dark: #1f1f1f;
+      --text-muted: #7e7e7e;
+      --card-blue: #405189; /* The "On Leave" card color */
+      --card-teal: #00c5fb; /* The "Total Departments" color */
+      --card-sky: #02c0ce;
+      --danger: #f62d51;
+      --border-radius: 10px;
+      --shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--body-bg);
+      color: var(--text-dark);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* --- SIDEBAR --- */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+      z-index: 100;
+      transition: 0.3s;
+    }
+
+    .brand-logo {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .brand-logo i {
+      font-size: 24px;
+      color: var(--primary-orange);
+    }
+
+    .brand-logo span {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary-orange);
+      line-height: 1.2;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 10px 0;
+      margin-top: 10px;
+    }
+
+    .sidebar-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 10px 25px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 25px;
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 15px;
+      transition: all 0.3s;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-link i {
+      width: 25px;
+      font-size: 18px;
+      color: #666;
+    }
+
+    /* Active/Hover State matching the image (Light orange bg + border) */
+    .nav-link:hover, .nav-link.active {
+      background: #fff8f3;
+      color: var(--primary-orange);
+      border-left-color: var(--primary-orange);
+    }
+    
+    .nav-link:hover i, .nav-link.active i {
+      color: var(--primary-orange);
+    }
+
+    /* --- MAIN CONTENT --- */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* HEADER */
+    .header {
+      height: 70px;
+      background: #ffffff;
+      box-shadow: 0 1px 15px rgba(0,0,0,0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 30px;
+      z-index: 99;
+    }
+
+    .header-left i { font-size: 20px; cursor: pointer; color: #333; }
+
+    .header-right { display: flex; align-items: center; gap: 15px; }
+
+    /* Buttons matching the image style */
+    .btn-orange {
+      background: linear-gradient(to right, #ff9b44 0%, #fc6075 100%);
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 50px; /* Pill shape */
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(255, 155, 68, 0.3);
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    
+    .btn-orange:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(255, 155, 68, 0.4); }
+
+    .btn-red {
+      background: #ffe6e6;
+      color: var(--danger);
+      border: 1px solid transparent;
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    .btn-red:hover { background: var(--danger); color: white; }
+
+    /* CONTENT BODY */
+    .page-content {
+      padding: 30px;
+      overflow-y: auto;
+      height: calc(100vh - 70px);
+    }
+
+    .page-header { margin-bottom: 25px; }
+    .page-title { font-size: 22px; font-weight: 600; color: #1f1f1f; margin-bottom: 5px; }
+    .page-subtitle { color: var(--text-muted); font-size: 14px; }
+
+    /* --- CARDS --- */
+    .card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 25px;
+      margin-bottom: 25px;
+      border: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    h3 { 
+      font-size: 18px; 
+      font-weight: 500; 
+      margin-bottom: 20px; 
+      color: #333; 
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    /* --- STATS GRID (Matching the colorful cards in image) --- */
+    /* Note: Since your original code has one generic div for stats, 
+       I am styling that div to act as a grid container. 
+       Your JS should ideally inject div elements inside this container. */
+    #stats-container {
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    /* If your JS loads text directly, this ensures it's readable. 
+       Ideally, update your JS to generate cards like below. */
+    .stat-card-demo {
+      padding: 20px;
+      border-radius: 10px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-card-demo h4 { font-size: 16px; font-weight: 500; opacity: 0.9; }
+    .stat-card-demo h2 { font-size: 32px; font-weight: 700; margin-top: 5px; }
+    
+    .bg-orange { background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%); }
+    .bg-blue { background: #405189; }
+    .bg-teal { background: #00c5fb; }
+    .bg-info { background: #02c0ce; }
+
+    /* --- FORMS --- */
+    .form-group { margin-bottom: 20px; }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #1f1f1f;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #e3e3e3;
+      border-radius: 5px;
+      background-color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      color: #333;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-orange);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 155, 68, 0.1);
+    }
+
+    .btn-submit {
+      background: var(--primary-orange);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+    .btn-submit:hover { background: var(--primary-hover); }
+
+    /* Two column grid for forms on large screens */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+      .btn-submit { width: auto; }
+    }
+
+    /* List Styling */
+    ul { list-style: none; }
+    li {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--primary-orange);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hide section helper */
+    .hidden-section { display: none; }
+
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="brand-logo">
+      <i class="fa-solid fa-building"></i>
+      <div>
+        <span>Employee<br>Management</span>
+      </div>
+    </div>
+    
+    <div class="sidebar-label">Main</div>
+    
+    <ul class="sidebar-menu">
+      <li>
+        <a class="nav-link active" onclick="showSection('stats-container', this)">
+          <i class="fa-solid fa-layer-group"></i> Dashboard
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" onclick="showSection('manager-section', this)">
+          <i class="fa-solid fa-user-tie"></i> Managers
+        </a>
+      </li>
+      <li class="has-submenu">
+        <a class="nav-link" onclick="showSection('employee-section', this)">
+          <i class="fa-solid fa-users"></i> Employees
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" onclick="showSection('holiday-section', this)">
+          <i class="fa-solid fa-calendar-xmark"></i> Leave & Holidays
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" onclick="showSection('announcement-section', this)">
+          <i class="fa-solid fa-bullhorn"></i> Announcements
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <div class="main-wrapper">
+    
+    <header class="header">
+      <div class="header-left">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+      <div class="header-right">
+        <button class="btn-orange" onclick="showSection('employee-section', document.querySelectorAll('.nav-link')[2])">
+          <i class="fa-solid fa-plus"></i> Add New Employee
+        </button>
+        <button onclick="logout()" class="btn-red">Logout</button>
+        <div style="width:35px; height:35px; background:#eee; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#555;">A</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+      
+      <div class="page-header">
+        <h2 class="page-title">Welcome, Admin</h2>
+        <p class="page-subtitle">Here's what's happening with your team today.</p>
+      </div>
+
+      <div id="stats-container">
+        <div class="stat-card-demo bg-orange">
+          <h4>Total Employees</h4>
+          <h2 id="stat-total-emp">0</h2> </div>
+        <div class="stat-card-demo bg-blue">
+          <h4>On Leave Today</h4>
+          <h2>0</h2>
+        </div>
+        <div class="stat-card-demo bg-teal">
+          <h4>Total Departments</h4>
+          <h2>4</h2>
+        </div>
+        <div class="stat-card-demo bg-info">
+          <h4>Pending Approvals</h4>
+          <h2>0</h2>
+        </div>
+      </div>
+
+      <div id="manager-section" class="card hidden-section">
+        <h3>Create Manager</h3>
+        <form id="createManagerForm">
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Manager Name</label>
+              <input type="text" id="m-name" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="m-email" placeholder="john@company.com" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <select id="m-dept" required>
+              <option value="IT">IT</option>
+              <option value="HR">HR</option>
+              <option value="Sales">Sales</option>
+              <option value="Finance">Finance</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-submit">Create Manager</button>
+        </form>
+        <div id="m-result" style="margin-top: 15px; color: var(--card-teal); font-weight: bold;"></div>
+      </div>
+
+      <div id="employee-section" class="card hidden-section">
+        <h3>Create Employee</h3>
+        <form id="createEmployeeForm">
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Employee Name</label>
+              <input type="text" id="e-name" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="e-email" required>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Department</label>
+              <select id="e-dept" onchange="loadManagers()" required>
+                <option value="">Select Department</option>
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Sales">Sales</option>
+                <option value="Finance">Finance</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Assign Manager</label>
+              <select id="e-manager" required>
+                <option value="">Select Manager</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Create Employee</button>
+        </form>
+        <div id="e-result" style="margin-top: 15px; color: var(--card-teal); font-weight: bold;"></div>
+      </div>
+
+      <div id="holiday-section" class="card hidden-section">
+        <h3>Manage Holidays</h3>
+        <div class="grid-2">
+          <form id="holidayForm">
+            <div class="form-group">
+              <label>Holiday Name</label>
+              <input type="text" id="h-name" required>
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="h-date" required>
+            </div>
+            <button type="submit" class="btn-submit">Add Holiday</button>
+          </form>
+          
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+            <h4 style="margin-bottom:15px; color: var(--text-dark);">Holiday List</h4>
+            <ul id="holidayList"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="announcement-section" class="card hidden-section">
+        <h3>Manage Announcements</h3>
+        <p style="margin-bottom:20px; color:#888;">Visible on the main login/landing page.</p>
+        <div class="grid-2">
+          <form id="announcementForm">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" id="a-title" required>
+            </div>
+            <div class="form-group">
+              <label>Content</label>
+              <textarea id="a-content" required rows="4"></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Post Announcement</button>
+          </form>
+          
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+            <h4 style="margin-bottom:15px; color: var(--text-dark);">Active Announcements</h4>
+            <ul id="announcementList"></ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function showSection(sectionId, element) {
+      // Hide all main containers
+      const sections = ['stats-container', 'manager-section', 'employee-section', 'holiday-section', 'announcement-section'];
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = 'none';
+      });
+
+      // Show specific section
+      const target = document.getElementById(sectionId);
+      if(target) {
+        // Special display for stats to keep grid layout, others block
+        target.style.display = (sectionId === 'stats-container') ? 'grid' : 'block';
+      }
+
+      // Handle Sidebar Active Class
+      if(element) {
+        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+        element.classList.add('active');
+      }
+    }
+
+    // Default load
+    document.addEventListener('DOMContentLoaded', () => {
+      showSection('stats-container');
+    });
+  </script>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

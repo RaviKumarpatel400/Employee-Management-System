@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMS | Modern Workforce Solutions</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* --- 1. GLOBAL VARIABLES & RESET --- */
+    :root {
+      --primary-blue: #0f172a;       /* Dark Navy */
+      --accent-orange: #ff9b44;      /* Matching your Admin Dashboard */
+      --text-dark: #334155;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --white: #ffffff;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      line-height: 1.6;
+      background-color: var(--white);
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; transition: 0.3s; }
+    ul { list-style: none; }
+
+    /* --- 2. NAVBAR --- */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 5%;
+      background: rgba(255, 255, 255, 0.95);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo i { color: var(--accent-orange); }
+
+    .nav-links { display: flex; gap: 30px; align-items: center; }
+    .nav-links a { color: var(--text-dark); font-weight: 500; font-size: 15px; }
+    .nav-links a:hover { color: var(--accent-orange); }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-block;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent-orange);
+      color: white;
+      box-shadow: 0 4px 14px rgba(255, 155, 68, 0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); background: #e08332; }
+
+    .btn-outline {
+      border: 2px solid white;
+      color: white;
+      background: transparent;
+    }
+    .btn-outline:hover { background: white; color: var(--primary-blue); }
+
+    /* --- 3. HERO SECTION (Banner) --- */
+    .hero {
+      height: 100vh; /* Full viewport height */
+      min-height: 600px;
+      /* Background Image with Dark Overlay */
+      background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.7)), 
+                  url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed; /* Parallax effect */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding-top: 60px;
+    }
+
+    .hero-content { max-width: 800px; padding: 20px; animation: fadeInUp 1s ease; }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    .hero p { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; }
+    .hero-btns { display: flex; gap: 15px; justify-content: center; }
+
+    /* --- 4. FEATURES GRID --- */
+    .section-padding { padding: 80px 5%; }
+    .section-header { text-align: center; margin-bottom: 50px; }
+    .section-header h2 { font-size: 2.5rem; color: var(--primary-blue); margin-bottom: 10px; }
+    .section-header p { color: var(--text-light); max-width: 600px; margin: 0 auto; }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-5px);
+      border-color: var(--accent-orange);
+    }
+
+    .icon-box {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 155, 68, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--accent-orange);
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 { margin-bottom: 10px; color: var(--primary-blue); }
+    .feature-card p { color: var(--text-light); font-size: 0.95rem; }
+
+    /* --- 5. ANNOUNCEMENTS SECTION --- */
+    .bg-light { background-color: var(--bg-light); }
+    
+    .announcement-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .announcement-card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 5px solid var(--accent-orange);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+      transition: 0.3s;
+    }
+    .announcement-card:hover { box-shadow: var(--shadow); }
+    .announcement-date { font-size: 0.85rem; color: #94a3b8; margin-top: 10px; display: block; }
+
+    /* --- 6. ABOUT / SHOWCASE --- */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .showcase-img img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .check-list li {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+    .check-list i { color: var(--accent-orange); }
+
+    /* --- 7. FOOTER --- */
+    footer {
+      background: var(--primary-blue);
+      color: white;
+      padding: 40px 5%;
+      text-align: center;
+      border-top: 4px solid var(--accent-orange);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .nav-links { display: none; } /* Simplified for mobile */
+      .showcase-grid { grid-template-columns: 1fr; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">
+      <img src="/img/EM.png" alt="ELMS Logo" style="height:36px; width:auto; border-radius:50%; object-fit:contain;" onerror="this.style.display='none'">
+      ELMS Portal
+    </div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#announcements">News</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="/login" class="btn btn-primary" id="nav-login-btn">Login Portal</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Manage Your Workforce <br> <span style="color: var(--accent-orange);">Efficiently & Securely</span></h1>
+      <p>The all-in-one solution for employee tracking, leave management, and organizational analytics. Designed for modern companies.</p>
+      <div class="hero-btns">
+        <a href="/login" class="btn btn-primary">Get Started Now</a>
+        <a href="#features" class="btn btn-outline">Explore Features</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="features" class="section-padding">
+    <div class="section-header">
+      <h2>Why Choose EMS?</h2>
+      <p>We provide the tools you need to streamline HR operations and boost productivity.</p>
+    </div>
+    
+    <div class="grid-container">
+      <div class="feature-card">
+        <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
+        <h3>Role-Based Security</h3>
+        <p>Granular access controls for Admins, Managers, and Employees ensure data privacy and security at every level.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
+        <h3>Leave Management</h3>
+        <p>Automated leave tracking, balance calculations, and approval workflows. Say goodbye to spreadsheets.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-box"><i class="fas fa-chart-pie"></i></div>
+        <h3>Real-Time Analytics</h3>
+        <p>Visualize departmental strength, attendance trends, and pending requests with our interactive dashboards.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-box"><i class="fas fa-bullhorn"></i></div>
+        <h3>Company Announcements</h3>
+        <p>Keep your entire team aligned with a centralized notice board accessible to all employees instantly.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="announcements" class="section-padding">
+    <div class="section-header">
+      <h2>Latest Updates</h2>
+      <p>Stay informed with the latest company news.</p>
+    </div>
+    <div id="announcement-list" class="announcement-wrapper">
+      <p style="text-align:center;">Loading announcements...</p>
+    </div>
+  </section>
+
+  <section id="about" class="section-padding bg-light">
+    <div class="showcase-grid">
+      <div class="showcase-text">
+        <h4 style="color: var(--accent-orange); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">The Platform</h4>
+        <h2 style="font-size: 2.2rem; color: var(--primary-blue); margin-bottom: 20px;">Designed for Clarity</h2>
+        <p style="margin-bottom: 20px; color: var(--text-light);">
+          Our EMS creates a seamless bridge between management and staff. We prioritize user experience, ensuring that complex HR tasks become simple clicks.
+        </p>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> Responsive Mobile-First Design</li>
+          <li><i class="fas fa-check-circle"></i> Fast & Secure Database</li>
+          <li><i class="fas fa-check-circle"></i> 24/7 System Availability</li>
+        </ul>
+      </div>
+      <div class="showcase-img">
+        <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Dashboard Preview">
+      </div>
+    </div>
+  </section>
+
+  
+
+  <footer>
+    <div class="container">
+      <h3>EMS Portal</h3>
+      <p style="margin: 10px 0 20px; opacity: 0.8;">Simplifying employee management for the future.</p>
+      <p>&copy; 2026 Employee Management System. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // 1. Auth Check: Change Login Button to "Dashboard" if logged in
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+      
+      if (token && role) {
+        const loginBtns = document.querySelectorAll('a[href="/login"]');
+        loginBtns.forEach(btn => {
+          btn.textContent = 'Go to Dashboard';
+          btn.href = `/${role.toLowerCase()}`;
+          // Add a logout helper style if needed
+        });
+      }
+      
+      // Load announcements
+      loadAnnouncements();
+    });
+
+    // 2. Load Announcements Function
+    async function loadAnnouncements() {
+      const list = document.getElementById('announcement-list');
+      try {
+        const res = await fetch('/api/announcements');
+        const announcements = await res.json();
+        
+        if (!announcements || announcements.length === 0) {
+          list.innerHTML = '<p style="text-align:center; color:#64748b; background:#f1f5f9; padding:20px; border-radius:8px;">No recent announcements posted.</p>';
+          return;
+        }
+
+        list.innerHTML = announcements.map(a => `
+          <div class="announcement-card">
+            <h3 style="color: #0f172a; font-size: 1.1rem;">${a.title}</h3>
+            <p style="color: #475569; margin-top: 5px;">${a.content}</p>
+            <small class="announcement-date">
+              <i class="far fa-clock"></i> Posted on ${new Date(a.createdAt).toLocaleDateString()}
+            </small>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load announcements', err);
+        list.innerHTML = '<p style="text-align:center; color:#ef4444;">Unable to load announcements at this time.</p>';
+      }
+    }
+  </script>
+
+</body>
+</html>

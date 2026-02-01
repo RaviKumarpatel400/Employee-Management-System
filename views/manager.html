@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager Portal | EMS</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* --- 1. GLOBAL VARIABLES & RESET --- */
+    :root {
+      --primary-navy: #0f172a;
+      --primary-orange: #ff9b44;
+      --bg-light: #f1f5f9;
+      --card-white: #ffffff;
+      --text-dark: #334155;
+      --text-muted: #64748b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --border-color: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* --- 2. SIDEBAR --- */
+    .sidebar {
+      width: 260px;
+      background-color: var(--primary-navy);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      color: white;
+      transition: all 0.3s;
+    }
+
+    .sidebar-header {
+      padding: 25px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-header i { color: var(--primary-orange); }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 20px 10px;
+      flex: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 8px;
+      margin-bottom: 5px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--primary-orange);
+    }
+    .nav-item i { margin-right: 12px; width: 20px; text-align: center; }
+
+    /* --- 3. MAIN CONTENT --- */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top Header */
+    .top-bar {
+      height: 70px;
+      background: var(--card-white);
+      padding: 0 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      z-index: 10;
+    }
+
+    .page-title { font-size: 1.25rem; font-weight: 600; color: var(--primary-navy); }
+    
+    .logout-btn {
+      padding: 9px 20px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9rem;
+      background: #fee2e2;
+      color: #ef4444;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+    .logout-btn:hover { background: #ef4444; color: white; }
+
+    /* Scrollable Area */
+    .dashboard-scroll {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    /* --- 4. CARDS & LAYOUT --- */
+    .card {
+      background: var(--card-white);
+      border-radius: var(--radius);
+      padding: 25px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      height: 100%; /* Fill grid cell */
+    }
+
+    .card h3 {
+      margin-bottom: 20px;
+      color: var(--primary-navy);
+      font-size: 1.1rem;
+      border-bottom: 1px solid var(--bg-light);
+      padding-bottom: 10px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Grid Layout */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+    
+    @media(min-width: 992px) {
+      .grid-2 { grid-template-columns: 1.5fr 1fr; } /* Requests wider than History */
+    }
+
+    /* --- 5. CALENDAR STYLES (Copied from Employee) --- */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .calendar-nav-btn {
+      background: #f1f5f9;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .calendar-nav-btn:hover { background: var(--primary-orange); color: white; }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+      border-left: 1px solid var(--border-color);
+    }
+    .calendar-day-name {
+      background: #f8fafc;
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+    }
+    .calendar-day {
+      padding: 10px 5px;
+      min-height: 80px;
+      border-bottom: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      position: relative;
+    }
+    .calendar-day.today { background: #f0f9ff; font-weight: 700; color: var(--primary-navy); }
+
+    /* --- 6. REQUEST LIST STYLES --- */
+    /* Assuming JS injects divs or tables, we style generic containers */
+    #requestsList .request-item {
+      border: 1px solid #e2e8f0;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: #fafafa;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Overlap Warning Text */
+    .overlap-warning {
+      color: var(--danger);
+      font-size: 0.85rem;
+      display: block;
+      margin-top: 5px;
+      font-weight: 500;
+    }
+    
+    .btn-approve { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
+    .btn-reject { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+
+    /* History List Styling */
+    #historyList div {
+      padding: 10px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.9rem;
+    }
+    #historyList div:last-child { border-bottom: none; }
+
+    /* --- 7. MODAL --- */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(2px);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.3s;
+    }
+    
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; }
+    input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; }
+    input:focus { border-color: var(--primary-orange); }
+    
+    .btn-modal { width: 100%; background: var(--primary-navy); color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <i class="fa-solid fa-user-tie"></i>
+      <span>Manager Portal</span>
+    </div>
+    
+    <ul class="sidebar-menu">
+      <li><a class="nav-item active"><i class="fa-solid fa-chart-line"></i> Overview</a></li>
+      <li><a class="nav-item" href="#requestsList"><i class="fa-solid fa-envelope-open-text"></i> Leave Requests</a></li>
+      <li><a class="nav-item" href="#calendarView"><i class="fa-solid fa-calendar-days"></i> Team Calendar</a></li>
+      <li><a class="nav-item" href="#historyList"><i class="fa-solid fa-clock-rotate-left"></i> Approval History</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    
+    <header class="top-bar">
+      <div class="page-title">Manager Dashboard</div>
+      <button onclick="logout()" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </header>
+
+    <div class="dashboard-scroll">
+      
+      <div style="margin-bottom: 25px;">
+        <h2 style="color: var(--primary-navy); font-size: 1.8rem;">Team Overview</h2>
+        <p style="color: var(--text-muted);">Manage requests and view team availability.</p>
+      </div>
+
+      <div class="grid-2">
+        
+        <div class="card">
+          <h3>
+            <span><i class="fa-solid fa-bell"></i> Pending Requests</span>
+            </h3>
+          <div id="requestsList" style="min-height: 100px;">
+            <p style="color: #999; text-align: center; padding: 20px;">Loading requests...</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fa-solid fa-list-check"></i> Recent Activity</h3>
+          <div id="historyList" style="max-height: 350px; overflow-y: auto;">
+            <p style="color: #999; text-align: center; padding: 20px;">Loading history...</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 25px;">
+        <div class="card">
+          <h3><i class="fa-solid fa-users-viewfinder"></i> Team Leave Calendar</h3>
+          <div id="calendarView">
+            <div style="text-align:center; padding:30px; color:#999;">Loading Team Calendar...</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="passwordModal" class="modal">
+    <div class="modal-content">
+      <h3 style="color: var(--primary-navy); margin-bottom: 10px;">Security Update Required</h3>
+      <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">
+        Please change your password to continue to the dashboard.
+      </p>
+      <form id="changePasswordForm">
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" id="newPassword" required minlength="6" placeholder="Minimum 6 characters">
+        </div>
+        <button type="submit" class="btn-modal">Update Password</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/calendar.js"></script>
+  <script src="/js/manager.js"></script>
+
+</body>
+</html>
