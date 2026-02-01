@@ -9,77 +9,101 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    /* --- 1. GLOBAL VARIABLES & RESET --- */
+    /* --- 1. MODERN THEME VARIABLES --- */
     :root {
-      --primary-navy: #0f172a;
-      --primary-orange: #ff9b44;
-      --primary-orange-hover: #e08332;
-      --bg-light: #f1f5f9;
-      --card-white: #ffffff;
-      --text-dark: #334155;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --radius: 10px;
+      /* Brand Colors */
+      --primary-navy: #1e293b;       /* Darker, richer navy */
+      --primary-accent: #3b82f6;     /* Professional Blue for active states */
+      --primary-orange: #f97316;     /* Vibrant Orange */
+      
+      /* Backgrounds & Text */
+      --bg-body: #f3f4f6;            /* Cool gray background */
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      
+      /* UI Elements */
+      --border-color: #e5e7eb;
+      --radius-lg: 16px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      
+      /* Transitions */
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-dark);
+      background-color: var(--bg-body);
+      color: var(--text-main);
       display: flex;
       height: 100vh;
       overflow: hidden;
+      font-size: 0.95rem;
     }
 
-    /* --- 2. SIDEBAR --- */
+    /* --- 2. SIDEBAR (Modern & Sleek) --- */
     .sidebar {
-      width: 260px;
-      background-color: var(--primary-navy);
+      width: 280px;
+      background: linear-gradient(180deg, var(--primary-navy) 0%, #0f172a 100%);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
       color: white;
-      transition: all 0.3s;
+      transition: var(--transition);
+      z-index: 1000;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.1);
     }
 
     .sidebar-header {
-      padding: 25px;
-      font-size: 1.4rem;
+      padding: 30px 25px;
+      font-size: 1.5rem;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      gap: 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      letter-spacing: -0.5px;
     }
     .sidebar-header i { color: var(--primary-orange); }
 
     .sidebar-menu {
       list-style: none;
-      padding: 20px 10px;
+      padding: 25px 15px;
       flex: 1;
+      overflow-y: auto;
     }
 
     .nav-item {
       display: flex;
       align-items: center;
-      padding: 12px 20px;
-      color: #cbd5e1;
+      padding: 14px 20px;
+      color: #94a3b8;
       text-decoration: none;
       font-weight: 500;
-      border-radius: 8px;
-      margin-bottom: 5px;
-      transition: 0.3s;
+      border-radius: 50px; /* Pill shape */
+      margin-bottom: 8px;
+      transition: var(--transition);
       cursor: pointer;
+      font-size: 0.95rem;
     }
 
-    .nav-item:hover, .nav-item.active {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--primary-orange);
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      padding-left: 25px; /* Slight movement effect */
     }
-    .nav-item i { margin-right: 12px; width: 20px; text-align: center; }
+
+    .nav-item.active {
+      background: var(--primary-orange);
+      color: white;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+    }
+    .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
 
     /* --- 3. MAIN CONTENT --- */
     .main-content {
@@ -87,253 +111,347 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      position: relative;
+      width: 100%;
     }
 
-    /* Top Header */
+    /* Top Bar */
     .top-bar {
-      height: 70px;
-      background: var(--card-white);
+      height: 80px;
+      background: var(--card-bg);
       padding: 0 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow-sm);
       z-index: 10;
+      border-bottom: 1px solid var(--border-color);
     }
 
-    .page-title { font-size: 1.25rem; font-weight: 600; color: var(--primary-navy); }
+    .page-title { 
+      font-size: 1.35rem; 
+      font-weight: 700; 
+      color: var(--primary-navy); 
+      letter-spacing: -0.5px;
+    }
 
-    .header-actions { display: flex; gap: 15px; }
+    .header-actions { display: flex; gap: 15px; align-items: center; }
 
     /* Buttons */
     .btn {
-      padding: 9px 20px;
+      padding: 10px 24px;
       border-radius: 50px;
       border: none;
       cursor: pointer;
-      font-weight: 500;
-      transition: 0.2s;
-      font-size: 0.9rem;
+      font-weight: 600;
+      transition: var(--transition);
+      font-size: 0.85rem;
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      letter-spacing: 0.3px;
     }
 
     .btn-password {
-      background: white;
-      color: var(--primary-orange);
-      border: 1px solid var(--primary-orange);
+      background: #eff6ff;
+      color: var(--primary-accent);
+      border: 1px solid transparent;
     }
-    .btn-password:hover { background: var(--primary-orange); color: white; }
+    .btn-password:hover { 
+      background: var(--primary-accent); 
+      color: white; 
+      transform: translateY(-2px);
+    }
 
     .logout-btn {
-      background: #fee2e2;
+      background: #fef2f2;
       color: #ef4444;
+      border: 1px solid transparent;
     }
-    .logout-btn:hover { background: #ef4444; color: white; }
+    .logout-btn:hover { 
+      background: #ef4444; 
+      color: white; 
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      transform: translateY(-2px);
+    }
 
     .btn-submit {
       background: var(--primary-navy);
       color: white;
       width: 100%;
-      border-radius: 8px;
-      padding: 12px;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      font-size: 1rem;
+      box-shadow: var(--shadow-md);
     }
-    .btn-submit:hover { background: #1e293b; }
+    .btn-submit:hover { 
+      background: #334155; 
+      transform: translateY(-2px); 
+      box-shadow: var(--shadow-lg);
+    }
 
     /* Scrollable Area */
     .dashboard-scroll {
       flex: 1;
       padding: 30px;
       overflow-y: auto;
+      scroll-behavior: smooth;
     }
 
-    /* --- 4. GRID & CARDS --- */
+    /* --- 4. CARDS & GRID --- */
     .grid-3 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
     }
 
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 25px;
-      margin-bottom: 25px;
+      gap: 30px;
+      margin-bottom: 30px;
     }
-    @media(min-width: 992px) { .grid-2 { grid-template-columns: 1fr 1.5fr; } }
+    @media(min-width: 1100px) { .grid-2 { grid-template-columns: 1fr 2fr; } }
 
     .card {
-      background: var(--card-white);
-      border-radius: var(--radius);
-      padding: 25px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(0,0,0,0.02);
+      transition: var(--transition);
     }
+    .card:hover { box-shadow: var(--shadow-lg); }
 
     .card h3 {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       color: var(--primary-navy);
-      font-size: 1.1rem;
-      border-bottom: 1px solid var(--bg-light);
-      padding-bottom: 10px;
-      font-weight: 600;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .card h3 i { color: var(--primary-orange); }
+
+    /* --- 5. OPTIMIZED CALENDAR (Key Requirement) --- */
+    .calendar-container {
+      background: white;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
     }
 
-    /* --- 5. FIXED CALENDAR STYLES (Grid Layout) --- */
     .calendar-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
+      padding: 0 5px;
     }
-    .calendar-header h4 { margin: 0; font-size: 1rem; color: var(--primary-navy); }
+    .calendar-header h4 { margin: 0; font-size: 1.1rem; color: var(--primary-navy); font-weight: 700; }
     
     .calendar-nav-btn {
-      background: #f1f5f9;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
+      background: white;
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 6px;
       cursor: pointer;
-      color: var(--text-dark);
+      color: var(--text-muted);
+      transition: 0.2s;
     }
-    .calendar-nav-btn:hover { background: var(--primary-orange); color: white; }
+    .calendar-nav-btn:hover { border-color: var(--primary-orange); color: var(--primary-orange); }
 
-    /* The Critical Grid Fix */
+    /* The Calendar Grid - Using Gap for borders ensures responsiveness */
     .calendar-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr); /* Forces 7 columns */
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-      border-left: 1px solid var(--border-color);
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: var(--border-color); /* Creates the lines */
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
     }
 
     .calendar-day-name {
       background: #f8fafc;
       font-weight: 600;
-      font-size: 0.8rem;
-      padding: 10px 0;
+      font-size: 0.85rem;
+      padding: 12px 0;
+      text-align: center;
       color: var(--text-muted);
-      border-bottom: 1px solid var(--border-color);
-      border-right: 1px solid var(--border-color);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .calendar-day {
-      padding: 10px 5px;
-      min-height: 80px;
-      border-bottom: 1px solid var(--border-color);
-      border-right: 1px solid var(--border-color);
+      background: white;
+      padding: 8px;
+      min-height: 90px; /* Good height for desktop */
       cursor: pointer;
       font-size: 0.9rem;
       position: relative;
       transition: background 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      color: var(--text-main);
     }
     
     .calendar-day:hover { background: #fff7ed; }
     
     .calendar-day.today {
-      background: #f0f9ff;
-      font-weight: 700;
-      color: var(--primary-navy);
+      background: #fff;
     }
     .calendar-day.today::after {
       content: '';
       position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 6px;
-      height: 6px;
+      top: 8px; right: 8px;
+      width: 8px; height: 8px;
       background: var(--primary-orange);
       border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(255,255,255,1);
     }
+    
     .calendar-day.empty { background: #fafafa; cursor: default; }
 
+    /* Calendar Mobile Optimization */
+    @media (max-width: 600px) {
+      .calendar-day {
+        min-height: 60px; /* Smaller height on phone */
+        padding: 4px;
+        font-size: 0.8rem;
+        justify-content: center;
+        align-items: center;
+      }
+      .calendar-day-name {
+        padding: 8px 0;
+        font-size: 0.7rem;
+      }
+      .calendar-day.today::after {
+        width: 6px; height: 6px;
+        top: 4px; right: 4px;
+      }
+    }
+
     /* --- 6. FORMS & TABLES --- */
-    .form-group { margin-bottom: 15px; }
+    .form-group { margin-bottom: 20px; }
     
     label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text-dark);
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     input, select, textarea {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
+      padding: 12px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
       font-family: inherit;
-      outline: none;
-      background: #f8fafc;
+      background: #fcfcfc;
+      transition: 0.3s;
+      color: var(--text-main);
     }
     input:focus, select:focus, textarea:focus {
       border-color: var(--primary-orange);
       background: white;
-      box-shadow: 0 0 0 3px rgba(255, 155, 68, 0.1);
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
     }
 
-    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    thead { background: #f8fafc; }
-    th { text-align: left; padding: 12px 15px; color: var(--text-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; }
-    td { padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-dark); }
+    /* Table Styling */
+    table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9rem; }
     
+    thead th { 
+      background: #f8fafc; 
+      padding: 15px; 
+      color: var(--text-muted); 
+      font-weight: 600; 
+      font-size: 0.8rem; 
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--border-color);
+      text-align: left;
+      white-space: nowrap;
+    }
+    
+    td { 
+      padding: 15px; 
+      border-bottom: 1px solid var(--border-color); 
+      color: var(--text-main); 
+      white-space: nowrap;
+    }
+    
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+
+    /* Status Badges (Example for dynamic content) */
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
     /* --- 7. MODAL --- */
     .modal {
       display: none;
       position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      backdrop-filter: blur(2px);
+      z-index: 2000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(15, 23, 42, 0.6); /* Darker blur */
+      backdrop-filter: blur(4px);
       align-items: center;
       justify-content: center;
+      animation: fadeIn 0.3s ease;
     }
     .modal-content {
       background: white;
-      padding: 30px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 0.3s;
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: relative;
     }
-    /* --- RESPONSIVE SIDEBAR & LAYOUT --- */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* --- RESPONSIVE LOGIC --- */
     @media (max-width: 992px) {
       .sidebar {
         position: fixed;
-        left: -260px;
+        left: -280px;
         height: 100%;
-        z-index: 1000;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        box-shadow: none;
       }
-      .sidebar.active { left: 0; }
+      .sidebar.active { left: 0; box-shadow: 4px 0 24px rgba(0,0,0,0.2); }
       
-      .top-bar { padding: 0 15px; }
-      .page-title { font-size: 1rem; }
-      .header-actions .btn { padding: 8px 12px; font-size: 0.8rem; }
+      .top-bar { padding: 0 20px; height: 70px; }
+      .page-title { font-size: 1.1rem; }
       
-      .dashboard-scroll { padding: 15px; }
+      /* Mobile Buttons */
+      .header-actions .btn span { display: none; } /* Hide text on small screens */
+      .header-actions .btn { padding: 10px; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
+      
+      .dashboard-scroll { padding: 20px; }
       .grid-3, .grid-2 { grid-template-columns: 1fr; }
       
       /* Hamburger Menu */
       .menu-toggle {
         display: block;
         margin-right: 15px;
-        font-size: 20px;
+        font-size: 22px;
         cursor: pointer;
         color: var(--primary-navy);
+        padding: 5px;
       }
       
-      /* Table Scroll */
-      table { min-width: 600px; } 
-
-      /* Mobile Overlay */
+      /* Overlay */
       .sidebar-overlay {
         position: fixed;
         top: 0; left: 0;
@@ -344,11 +462,9 @@
         visibility: hidden;
         transition: 0.3s;
       }
-      .sidebar-overlay.active { 
-        opacity: 1; 
-        visibility: visible;
-      }
+      .sidebar-overlay.active { opacity: 1; visibility: visible; }
     }
+
     @media (min-width: 993px) {
       .menu-toggle { display: none; }
       .sidebar-overlay { display: none; }
@@ -358,6 +474,7 @@
 <body>
 
   <div class="sidebar-overlay"></div>
+
   <aside class="sidebar">
     <div class="sidebar-header">
       <i class="fa-solid fa-users-viewfinder"></i>
@@ -381,24 +498,24 @@
       </div>
       <div class="header-actions">
         <button onclick="document.getElementById('passwordModal').style.display='flex'" class="btn btn-password">
-          <i class="fa-solid fa-key"></i> Change Password
+          <i class="fa-solid fa-key"></i> <span>Change Password</span>
         </button>
         <button onclick="logout()" class="btn logout-btn">
-          <i class="fa-solid fa-right-from-bracket"></i> Logout
+          <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
         </button>
       </div>
     </header>
 
     <div class="dashboard-scroll">
       
-      <div style="margin-bottom: 25px;">
-        <h2 id="employeeGreeting" style="color: var(--primary-navy); font-size: 1.8rem;">Hello, Employee!</h2>
-        <p style="color: var(--text-muted);">Welcome back. Here is your leave summary.</p>
+      <div style="margin-bottom: 30px;">
+        <h2 id="employeeGreeting" style="color: var(--primary-navy); font-size: 1.75rem; font-weight: 700;">Hello, Employee!</h2>
+        <p style="color: var(--text-muted); margin-top: 5px;">Welcome back to your workspace.</p>
       </div>
 
       <div id="balanceContainer" class="grid-3">
-        <div class="card" style="display:flex; align-items:center; justify-content:center; height:100px;">
-          <i class="fa-solid fa-spinner fa-spin" style="margin-right:10px;"></i> Loading Balances...
+        <div class="card" style="display:flex; align-items:center; justify-content:center; height:120px;">
+          <i class="fa-solid fa-circle-notch fa-spin" style="margin-right:10px; color: var(--primary-orange);"></i> Loading Data...
         </div>
       </div>
 
@@ -416,7 +533,7 @@
               </select>
             </div>
             
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
               <div class="form-group">
                 <label>From Date</label>
                 <input type="date" id="l-from" required>
@@ -429,7 +546,7 @@
 
             <div class="form-group">
               <label>Reason</label>
-              <textarea id="l-reason" required rows="3" placeholder="Enter reason..."></textarea>
+              <textarea id="l-reason" required rows="3" placeholder="Please describe the reason briefly..."></textarea>
             </div>
             <button type="submit" class="btn btn-submit">Submit Request</button>
           </form>
@@ -437,8 +554,10 @@
 
         <div class="card">
           <h3><i class="fa-regular fa-calendar-check"></i> Work Calendar</h3>
-          <div id="calendarView">
-            <div style="padding:20px; text-align:center; color:#999;">Loading Calendar...</div>
+          <div id="calendarView" class="calendar-container">
+            <div style="padding:40px; text-align:center; color:#999;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Loading Calendar...
+            </div>
           </div>
         </div>
 
@@ -471,14 +590,14 @@
 
   <div id="passwordModal" class="modal">
     <div class="modal-content">
-      <h3 style="margin-bottom:15px; color:var(--primary-navy);">Change Password</h3>
+      <h3 style="margin-bottom:20px; color:var(--primary-navy); border-bottom:1px solid #eee; padding-bottom:10px;">Change Password</h3>
       <form id="changePasswordForm">
         <div class="form-group">
           <label>New Password</label>
           <input type="password" id="newPassword" required minlength="6" placeholder="Min 6 characters">
         </div>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-          <button type="submit" class="btn btn-submit" style="margin-top:0; flex:1;">Update</button>
+        <div style="display:flex; gap:15px; margin-top:25px;">
+          <button type="submit" class="btn btn-submit" style="margin-top:0; flex:1;">Update Password</button>
           <button type="button" class="btn" onclick="document.getElementById('passwordModal').style.display='none'" style="background:#f1f5f9; color:#666; flex:1;">Cancel</button>
         </div>
       </form>
