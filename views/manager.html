@@ -203,6 +203,37 @@
     }
     .calendar-day.today { background: #f0f9ff; font-weight: 700; color: var(--primary-navy); }
 
+    /* Holiday badges */
+    .calendar-leave.holiday { font-weight: 600; border-radius: 6px; padding: 3px 6px; margin-top: 4px; display: inline-block; }
+    .holiday-company { background: #fff7ed; color: #c2410c; }
+    .holiday-national { background: #ecfeff; color: #0e7490; }
+    .holiday-regional { background: #f5f3ff; color: #6d28d9; }
+    .holiday-other { background: #f0fdf4; color: #15803d; }
+    
+    /* Availability summary badges */
+    .calendar-availability {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .availability-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .availability-badge.on-leave { background: #fee2e2; color: #b91c1c; }
+    .availability-badge.available { background: #dcfce7; color: #166534; }
+
+    /* Leave type badges */
+    .calendar-leave { display: block; margin-top: 4px; padding: 3px 6px; border-radius: 6px; font-size: 0.78rem; }
+    .leave-vacation { background: #fff7ed; color: #9a3412; }
+    .leave-sick { background: #fef2f2; color: #991b1b; }
+    .leave-casual { background: #f0f9ff; color: #0c4a6e; }
+
     /* --- 6. REQUEST LIST STYLES --- */
     /* Assuming JS injects divs or tables, we style generic containers */
     #requestsList .request-item {

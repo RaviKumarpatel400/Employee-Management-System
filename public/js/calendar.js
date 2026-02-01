@@ -1,5 +1,5 @@
 // Shared Calendar Logic
-function createCalendar(containerId, leaves, holidays) {
+function createCalendar(containerId, leaves, holidays, options = {}) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -45,12 +45,36 @@ function createCalendar(containerId, leaves, holidays) {
       
       let content = `<span class="calendar-day-number">${day}</span>`;
 
+      // Availability summary (Manager view)
+      if (options.showAvailability && typeof options.teamSize === 'number') {
+        const onLeaveSet = new Set();
+        if (Array.isArray(leaves)) {
+          leaves.forEach(l => {
+            const start = new Date(l.fromDate).toISOString().split('T')[0];
+            const end = new Date(l.toDate).toISOString().split('T')[0];
+            if (dateStr >= start && dateStr <= end) {
+              const empId = (l.employeeId && (l.employeeId._id || l.employeeId.id)) ? (l.employeeId._id || l.employeeId.id) : l.employeeId;
+              if (empId) onLeaveSet.add(String(empId));
+            }
+          });
+        }
+        const leaveCount = onLeaveSet.size;
+        const availableCount = Math.max(0, (options.teamSize || 0) - leaveCount);
+        content += `
+          <div class="calendar-availability">
+            <span class="availability-badge on-leave">On Leave: ${leaveCount}</span>
+            <span class="availability-badge available">Available: ${availableCount}</span>
+          </div>
+        `;
+      }
+
       // Add Holidays
       if (holidays) {
         holidays.forEach(h => {
           const hDate = new Date(h.date).toISOString().split('T')[0];
           if (hDate === dateStr) {
-            content += `<div class="calendar-leave holiday" title="${h.name}">${h.name}</div>`;
+            const typeClass = `holiday-${(h.type || 'Company').toLowerCase()}`;
+            content += `<div class="calendar-leave holiday ${typeClass}" title="${h.name}">${h.name}</div>`;
           }
         });
       }
@@ -63,8 +87,10 @@ function createCalendar(containerId, leaves, holidays) {
           
           if (dateStr >= start && dateStr <= end) {
             const colorClass = `leave-${l.leaveType.toLowerCase()}`;
-            // For managers, show employee name; for employees, show leave type
-            const label = l.employeeId && l.employeeId.name ? l.employeeId.name : l.leaveType;
+            // For managers, show employee name + ID; for employees, show leave type
+            const label = l.employeeId && l.employeeId.name 
+              ? `${l.employeeId.name}${l.employeeId.employeeId ? ` (${l.employeeId.employeeId})` : ''}` 
+              : l.leaveType;
             content += `<div class="calendar-leave ${colorClass}" title="${label}">${label}</div>`;
           }
         });

@@ -6,7 +6,7 @@ if (user && user.firstLogin) {
 
 if (user) {
   const el = document.getElementById('employeeGreeting');
-  if (el) el.textContent = `Hello, ${user.name}!`;
+  if (el) el.textContent = `Hello, ${user.name}${user.employeeId ? ` (${user.employeeId})` : ''}!`;
 }
 
 // Change Password
@@ -84,7 +84,30 @@ async function loadData() {
   });
 
 // Auto-Calculate Days
+// Activity
+async function loadActivity() {
+  try {
+    const res = await fetch('/api/employee/activity', {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const logs = await res.json();
+    const list = document.getElementById('employeeActivity');
+    if (!list) return;
+    list.innerHTML = '';
+    logs.forEach(l => {
+      const li = document.createElement('li');
+      li.style.borderBottom = '1px solid #eee';
+      li.style.padding = '10px 0';
+      li.innerHTML = `<strong>${l.action}</strong> — ${l.message} <br><small style="color:#888;">${new Date(l.createdAt).toLocaleString()}</small>`;
+      list.appendChild(li);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 let holidays = [];
+
 
 // Fetch holidays on load
 fetch('/api/employee/holidays', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
@@ -127,6 +150,24 @@ function calculateDays() {
 document.getElementById('l-from').addEventListener('change', calculateDays);
 document.getElementById('l-to').addEventListener('change', calculateDays);
 
+const fromInput = document.getElementById('l-from');
+const toInput = document.getElementById('l-to');
+function syncToMin() {
+  if (!fromInput.value) {
+    toInput.value = '';
+    toInput.disabled = true;
+    toInput.removeAttribute('min');
+    return;
+  }
+  toInput.disabled = false;
+  toInput.min = fromInput.value;
+  if (toInput.value && toInput.value < toInput.min) {
+    toInput.value = toInput.min;
+  }
+}
+syncToMin();
+fromInput.addEventListener('change', syncToMin);
+
 // Calendar
 fetch('/api/employee/calendar', { headers })
   .then(res => res.json())
@@ -142,6 +183,11 @@ document.getElementById('applyLeaveForm').addEventListener('submit', async (e) =
   const fromDate = document.getElementById('l-from').value;
   const toDate = document.getElementById('l-to').value;
   const reason = document.getElementById('l-reason').value;
+
+  if (new Date(toDate) < new Date(fromDate)) {
+    alert('To Date must be on or after From Date');
+    return;
+  }
 
   try {
     const res = await fetch('/api/employee/apply-leave', {
@@ -167,3 +213,4 @@ document.getElementById('applyLeaveForm').addEventListener('submit', async (e) =
 });
 
 loadData();
+loadActivity();

@@ -100,8 +100,8 @@ router.post('/create-employee', async (req, res) => {
 // Manage Holidays
 router.post('/holidays', async (req, res) => {
   try {
-    const { name, date } = req.body;
-    const holiday = new Holiday({ name, date });
+    const { name, date, type } = req.body;
+    const holiday = new Holiday({ name, date, type });
     await holiday.save();
     res.json(holiday);
   } catch (err) {

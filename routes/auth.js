@@ -32,7 +32,9 @@ router.post('/login', async (req, res) => {
         name: user.name,
         role: user.role,
         firstLogin: user.firstLogin,
-        department: user.department
+        department: user.department,
+        employeeId: user.employeeId || null,
+        managerId: user.managerId || null
       }
     });
   } catch (err) {

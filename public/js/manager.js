@@ -42,7 +42,7 @@ async function loadData() {
     });
     const data = await res.json();
     teamApprovedLeaves = data.leaves || [];
-    createCalendar('calendarView', data.leaves || [], data.holidays || []);
+    createCalendar('calendarView', data.leaves || [], data.holidays || [], { showAvailability: true, teamSize: data.teamSize || 0 });
     loadRequests(); // Load requests after we have calendar data
   } catch (err) {
     console.error(err);
@@ -73,7 +73,7 @@ async function loadRequests() {
       div.style.borderBottom = '1px solid #eee';
       div.style.padding = '10px 0';
       div.innerHTML = `
-        <strong>${req.employeeId.name}</strong> - ${req.leaveType} <br>
+        <strong>${req.employeeId.name}${req.employeeId.employeeId ? ` (${req.employeeId.employeeId})` : ''}</strong> - ${req.leaveType} <br>
         ${new Date(req.fromDate).toDateString()} to ${new Date(req.toDate).toDateString()} (${req.days} days)<br>
         <em>Reason: ${req.reason}</em>
         ${overlaps ? `<span class="overlap-warning">Warning: Overlaps with ${overlaps} approved leave(s)</span>` : ''}
@@ -90,6 +90,27 @@ async function loadRequests() {
   }
 }
 
+async function loadRecentActivity() {
+  try {
+    const res = await fetch('/api/manager/team-activity', {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const logs = await res.json();
+    const list = document.getElementById('historyList');
+    if (!list) return;
+    list.innerHTML = '';
+    logs.forEach(l => {
+      const div = document.createElement('div');
+      div.style.borderBottom = '1px solid #eee';
+      div.style.padding = '10px 0';
+      const actor = l.userId && l.userId.name ? `${l.userId.name}${l.userId.employeeId ? ` (${l.userId.employeeId})` : ''}` : '';
+      div.innerHTML = `<strong>${actor}</strong> — ${l.message} <br><small style="color:#888;">${new Date(l.createdAt).toLocaleString()}</small>`;
+      list.appendChild(div);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
 function checkOverlap(req) {
   const start = new Date(req.fromDate);
   const end = new Date(req.toDate);
@@ -145,3 +166,4 @@ async function processLeave(id, status) {
 // no-op: calendar rendered in loadData
 
 loadData();
+loadRecentActivity();

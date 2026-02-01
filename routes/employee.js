@@ -4,6 +4,7 @@ const LeaveRequest = require('../models/LeaveRequest');
 const LeaveBalance = require('../models/LeaveBalance');
 const Holiday = require('../models/Holiday');
 const User = require('../models/User');
+const ActivityLog = require('../models/ActivityLog');
 const { authenticateToken, authorizeRole } = require('../middleware/auth');
 
 router.use(authenticateToken, authorizeRole(['Employee']));
@@ -70,6 +71,16 @@ router.post('/apply-leave', async (req, res) => {
     });
 
     await leaveRequest.save();
+    
+    try {
+      await ActivityLog.create({
+        userId: req.user.id,
+        role: 'Employee',
+        action: 'apply_leave',
+        message: `${leaveType} leave applied: ${new Date(fromDate).toLocaleDateString()} to ${new Date(toDate).toLocaleDateString()} (${days} days)`,
+        meta: { leaveRequestId: leaveRequest._id, leaveType, days, fromDate, toDate }
+      });
+    } catch (_) {}
     res.json(leaveRequest);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -120,6 +131,18 @@ router.get('/holidays', async (req, res) => {
     res.json(holidays);
   } catch (err) {
     res.json([]); // Fallback so client can continue without blocking
+  }
+});
+
+// Recent Activity
+router.get('/activity', async (req, res) => {
+  try {
+    const logs = await ActivityLog.find({ userId: req.user.id })
+      .sort({ createdAt: -1 })
+      .limit(10);
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

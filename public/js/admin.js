@@ -78,7 +78,7 @@ async function loadManagers() {
     managers.forEach(m => {
       const opt = document.createElement('option');
       opt.value = m._id;
-      opt.textContent = m.name;
+      opt.textContent = `${m.name} (${m._id})`;
       managerSelect.appendChild(opt);
     });
   } catch (err) {
@@ -124,7 +124,7 @@ async function loadHolidays() {
     holidays.forEach(h => {
       const li = document.createElement('li');
       li.innerHTML = `
-        ${new Date(h.date).toDateString()} - ${h.name} 
+        ${new Date(h.date).toDateString()} - ${h.name} <span style="color:#888;">(${h.type || 'Company'})</span>
         <button onclick="deleteHoliday('${h._id}')" style="color:red; cursor:pointer; border:none; background:none;">[x]</button>
       `;
       list.appendChild(li);
@@ -139,6 +139,7 @@ document.getElementById('holidayForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = document.getElementById('h-name').value;
   const date = document.getElementById('h-date').value;
+  const type = document.getElementById('h-type').value;
 
   try {
     const res = await fetch('/api/admin/holidays', {
@@ -147,7 +148,7 @@ document.getElementById('holidayForm').addEventListener('submit', async (e) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify({ name, date })
+      body: JSON.stringify({ name, date, type })
     });
     
     if (res.ok) {

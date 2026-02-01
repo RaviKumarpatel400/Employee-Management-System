@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Database Connection
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/emsr';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://ravikumar850840_db_user:7SytKuP80n56JUzP@cluster0.l3awcew.mongodb.net/employee-leave-management?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.set('bufferTimeoutMS', 30000);
 mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 30000 })
   .then(() => console.log('MongoDB Connected'))

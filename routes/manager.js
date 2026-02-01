@@ -4,6 +4,7 @@ const LeaveRequest = require('../models/LeaveRequest');
 const LeaveBalance = require('../models/LeaveBalance');
 const User = require('../models/User');
 const Holiday = require('../models/Holiday');
+const ActivityLog = require('../models/ActivityLog');
 const { authenticateToken, authorizeRole } = require('../middleware/auth');
 
 router.use(authenticateToken, authorizeRole(['Manager']));
@@ -12,7 +13,7 @@ router.use(authenticateToken, authorizeRole(['Manager']));
 router.get('/leaves', async (req, res) => {
   try {
     const leaves = await LeaveRequest.find({ managerId: req.user.id })
-      .populate('employeeId', 'name email')
+      .populate('employeeId', 'name email employeeId')
       .sort({ createdAt: -1 });
     res.json(leaves);
   } catch (err) {
@@ -59,6 +60,16 @@ router.put('/leaves/:id', async (req, res) => {
     leave.managerComment = comment;
     await leave.save();
 
+    try {
+      await ActivityLog.create({
+        userId: req.user.id,
+        role: 'Manager',
+        action: `leave_${status.toLowerCase()}`,
+        message: `${status} leave for ${leave.employeeId} (${leave.leaveType}, ${leave.days} days)`,
+        meta: { leaveRequestId: leave._id, employeeId: leave.employeeId, leaveType: leave.leaveType, days: leave.days }
+      });
+    } catch (_) {}
+
     res.json(leave);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -75,11 +86,37 @@ router.get('/calendar', async (req, res) => {
     const leaves = await LeaveRequest.find({
       employeeId: { $in: employeeIds },
       status: 'Approved'
-    }).populate('employeeId', 'name');
+    }).populate('employeeId', 'name employeeId');
     
     const holidays = await Holiday.find();
 
-    res.json({ leaves, holidays });
+    res.json({ leaves, holidays, teamSize: employees.length });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Recent Activity
+router.get('/activity', async (req, res) => {
+  try {
+    const logs = await ActivityLog.find({ userId: req.user.id })
+      .sort({ createdAt: -1 })
+      .limit(10);
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.get('/team-activity', async (req, res) => {
+  try {
+    const employees = await User.find({ managerId: req.user.id }, '_id');
+    const employeeIds = employees.map(e => e._id);
+    const logs = await ActivityLog.find({ userId: { $in: employeeIds } })
+      .sort({ createdAt: -1 })
+      .limit(20)
+      .populate('userId', 'name employeeId');
+    res.json(logs);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -89,7 +126,7 @@ router.get('/calendar', async (req, res) => {
 router.get('/history', async (req, res) => {
   try {
     const leaves = await LeaveRequest.find({ managerId: req.user.id })
-      .populate('employeeId', 'name email')
+      .populate('employeeId', 'name email employeeId')
       .sort({ updatedAt: -1 }); // Recently processed first
     res.json(leaves);
   } catch (err) {
