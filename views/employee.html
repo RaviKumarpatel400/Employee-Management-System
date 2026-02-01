@@ -266,7 +266,7 @@
     /* The Calendar Grid - Using Gap for borders ensures responsiveness */
     .calendar-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(80px, 1fr));
       gap: 1px;
       background: var(--border-color); /* Creates the lines */
       border: 1px solid var(--border-color);
@@ -325,6 +325,8 @@
 
     /* Calendar Mobile Optimization */
     @media (max-width: 600px) {
+      #calendarView { overflow-x: auto; }
+      .calendar-grid { min-width: 700px; }
       .calendar-day {
         min-height: 60px; /* Smaller height on phone */
         padding: 4px;

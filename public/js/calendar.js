@@ -17,6 +17,7 @@ function createCalendar(containerId, leaves, holidays, options = {}) {
       "July", "August", "September", "October", "November", "December"
     ];
 
+    const isCompact = typeof options.compact === 'boolean' ? options.compact : (window.innerWidth < 600);
     let html = `
       <div class="calendar-controls">
         <button class="btn" style="width:auto; padding: 5px 10px;" id="prevMonth">&lt;</button>
@@ -24,13 +25,13 @@ function createCalendar(containerId, leaves, holidays, options = {}) {
         <button class="btn" style="width:auto; padding: 5px 10px;" id="nextMonth">&gt;</button>
       </div>
       <div class="calendar-grid">
-        <div class="calendar-header">Sun</div>
-        <div class="calendar-header">Mon</div>
-        <div class="calendar-header">Tue</div>
-        <div class="calendar-header">Wed</div>
-        <div class="calendar-header">Thu</div>
-        <div class="calendar-header">Fri</div>
-        <div class="calendar-header">Sat</div>
+        <div class="calendar-day-name">Sun</div>
+        <div class="calendar-day-name">Mon</div>
+        <div class="calendar-day-name">Tue</div>
+        <div class="calendar-day-name">Wed</div>
+        <div class="calendar-day-name">Thu</div>
+        <div class="calendar-day-name">Fri</div>
+        <div class="calendar-day-name">Sat</div>
     `;
 
     // Empty cells for days before start of month
@@ -60,12 +61,21 @@ function createCalendar(containerId, leaves, holidays, options = {}) {
         }
         const leaveCount = onLeaveSet.size;
         const availableCount = Math.max(0, (options.teamSize || 0) - leaveCount);
-        content += `
-          <div class="calendar-availability">
-            <span class="availability-badge on-leave">On Leave: ${leaveCount}</span>
-            <span class="availability-badge available">Available: ${availableCount}</span>
-          </div>
-        `;
+        if (!isCompact) {
+          content += `
+            <div class="calendar-availability">
+              <span class="availability-badge on-leave">On Leave: ${leaveCount}</span>
+              <span class="availability-badge available">Available: ${availableCount}</span>
+            </div>
+          `;
+        } else {
+          content += `
+            <div class="calendar-availability">
+              <span class="availability-badge on-leave">${leaveCount}</span>
+              <span class="availability-badge available">${availableCount}</span>
+            </div>
+          `;
+        }
       }
 
       // Add Holidays
@@ -81,19 +91,34 @@ function createCalendar(containerId, leaves, holidays, options = {}) {
 
       // Add Leaves
       if (leaves) {
-        leaves.forEach(l => {
-          const start = new Date(l.fromDate).toISOString().split('T')[0];
-          const end = new Date(l.toDate).toISOString().split('T')[0];
-          
-          if (dateStr >= start && dateStr <= end) {
-            const colorClass = `leave-${l.leaveType.toLowerCase()}`;
-            // For managers, show employee name + ID; for employees, show leave type
-            const label = l.employeeId && l.employeeId.name 
-              ? `${l.employeeId.name}${l.employeeId.employeeId ? ` (${l.employeeId.employeeId})` : ''}` 
-              : l.leaveType;
-            content += `<div class="calendar-leave ${colorClass}" title="${label}">${label}</div>`;
-          }
-        });
+        if (isCompact) {
+          let v = 0, s = 0, c = 0;
+          leaves.forEach(l => {
+            const start = new Date(l.fromDate).toISOString().split('T')[0];
+            const end = new Date(l.toDate).toISOString().split('T')[0];
+            if (dateStr >= start && dateStr <= end) {
+              const t = (l.leaveType || '').toLowerCase();
+              if (t === 'vacation') v++;
+              else if (t === 'sick') s++;
+              else if (t === 'casual') c++;
+            }
+          });
+          if (v) content += `<div class="calendar-leave leave-vacation">V: ${v}</div>`;
+          if (s) content += `<div class="calendar-leave leave-sick">S: ${s}</div>`;
+          if (c) content += `<div class="calendar-leave leave-casual">C: ${c}</div>`;
+        } else {
+          leaves.forEach(l => {
+            const start = new Date(l.fromDate).toISOString().split('T')[0];
+            const end = new Date(l.toDate).toISOString().split('T')[0];
+            if (dateStr >= start && dateStr <= end) {
+              const colorClass = `leave-${l.leaveType.toLowerCase()}`;
+              const label = l.employeeId && l.employeeId.name 
+                ? `${l.employeeId.name}${l.employeeId.employeeId ? ` (${l.employeeId.employeeId})` : ''}` 
+                : l.leaveType;
+              content += `<div class="calendar-leave ${colorClass}" title="${label}">${label}</div>`;
+            }
+          });
+        }
       }
 
       html += `<div class="calendar-day">${content}</div>`;

@@ -167,3 +167,27 @@ async function processLeave(id, status) {
 
 loadData();
 loadRecentActivity();
+
+// Responsive Sidebar Toggle
+(function initResponsiveNav() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.querySelector('.sidebar-overlay');
+  const toggle = document.querySelector('.menu-toggle');
+  if (!sidebar || !overlay || !toggle) return;
+  const open = () => {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+  };
+  const close = () => {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+  };
+  toggle.addEventListener('click', open);
+  overlay.addEventListener('click', close);
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 993) close();
+  });
+})();
