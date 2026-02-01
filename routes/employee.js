@@ -15,8 +15,13 @@ const calculateLeaveDays = async (start, end) => {
   const endDate = new Date(end);
   
   // Fetch holidays
-  const holidays = await Holiday.find({}, 'date');
-  const holidayStrings = holidays.map(h => h.date.toISOString().split('T')[0]);
+  let holidayStrings = [];
+  try {
+    const holidays = await Holiday.find({}, 'date');
+    holidayStrings = holidays.map(h => h.date.toISOString().split('T')[0]);
+  } catch (e) {
+    holidayStrings = [];
+  }
 
   while (currentDate <= endDate) {
     const dayOfWeek = currentDate.getDay();
@@ -96,7 +101,12 @@ router.get('/balance', async (req, res) => {
 router.get('/calendar', async (req, res) => {
   try {
     const leaves = await LeaveRequest.find({ employeeId: req.user.id, status: 'Approved' });
-    const holidays = await Holiday.find();
+    let holidays = [];
+    try {
+      holidays = await Holiday.find();
+    } catch (e) {
+      holidays = [];
+    }
     res.json({ leaves, holidays });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -109,7 +119,7 @@ router.get('/holidays', async (req, res) => {
     const holidays = await Holiday.find().sort({ date: 1 });
     res.json(holidays);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.json([]); // Fallback so client can continue without blocking
   }
 });
 

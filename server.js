@@ -16,7 +16,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Database Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/emsr';
-mongoose.connect(MONGO_URI)
+mongoose.set('bufferTimeoutMS', 30000);
+mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 30000 })
   .then(() => console.log('MongoDB Connected'))
   .catch(err => {
     console.error('MongoDB Connection Error:', err.message);
