@@ -170,7 +170,14 @@
     .login-footer a { color: var(--primary-orange); text-decoration: none; font-weight: 500; }
 
     /* --- RESPONSIVE --- */
-    @media (min-width: 768px) {
+    @media (max-width: 768px) {
+      .split-image { display: none; }
+      .split-form { width: 100%; padding: 20px; }
+      .login-wrapper { max-width: 100%; }
+      .login-header h2 { font-size: 1.5rem; }
+    }
+    
+    @media (min-width: 769px) {
       .split-image { display: block; }
     }
 

@@ -3,226 +3,508 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EMS | Modern Workforce Solutions</title>
+  <title>EMS | Enterprise Workforce Solutions</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     /* --- 1. GLOBAL VARIABLES & RESET --- */
     :root {
-      --primary-blue: #0f172a;       /* Dark Navy */
-      --accent-orange: #ff9b44;      /* Matching your Admin Dashboard */
-      --text-dark: #334155;
-      --text-light: #64748b;
+      /* Brand Colors */
+      --primary-navy: #0f172a;       /* Deep Navy */
+      --primary-hover: #1e293b;
+      --accent-orange: #ff9b44;      /* Brand Orange */
+      --accent-hover: #e08332;
+      
+      /* Neutrals */
+      --text-main: #334155;
+      --text-muted: #64748b;
+      --bg-body: #ffffff;
       --bg-light: #f8fafc;
       --white: #ffffff;
-      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+      /* UI Effects */
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
     
     body {
       font-family: 'Poppins', sans-serif;
-      color: var(--text-dark);
-      line-height: 1.6;
-      background-color: var(--white);
+      color: var(--text-main);
+      line-height: 1.7;
+      background-color: var(--bg-body);
       overflow-x: hidden;
     }
 
-    a { text-decoration: none; transition: 0.3s; }
+    a { text-decoration: none; transition: var(--transition); }
     ul { list-style: none; }
+    img { max-width: 100%; display: block; }
 
-    /* --- 2. NAVBAR --- */
+    /* --- 2. NAVBAR (Glassmorphism) --- */
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 5%;
-      background: rgba(255, 255, 255, 0.95);
+      padding: 15px 5%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       position: fixed;
       width: 100%;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: var(--transition);
+    }
+
+    .navbar.scrolled {
+      padding: 10px 5%;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: var(--shadow-sm);
     }
 
     .logo {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--primary-blue);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary-navy);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      letter-spacing: -0.5px;
     }
-    .logo i { color: var(--accent-orange); }
+    .logo i { color: var(--accent-orange); font-size: 28px; }
 
-    .nav-links { display: flex; gap: 30px; align-items: center; }
-    .nav-links a { color: var(--text-dark); font-weight: 500; font-size: 15px; }
+    .nav-links { display: flex; gap: 35px; align-items: center; }
+    .nav-links a { 
+      color: var(--primary-navy); 
+      font-weight: 500; 
+      font-size: 15px; 
+      position: relative;
+    }
+    
+    /* Nav Hover Effect */
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--accent-orange);
+      transition: var(--transition);
+    }
     .nav-links a:hover { color: var(--accent-orange); }
+    .nav-links a:hover::after { width: 100%; }
 
     /* Buttons */
     .btn {
-      padding: 10px 24px;
+      padding: 12px 30px;
       border-radius: 50px;
       font-weight: 600;
-      font-size: 14px;
-      display: inline-block;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       cursor: pointer;
       border: none;
-      transition: all 0.3s ease;
+      transition: var(--transition);
     }
 
     .btn-primary {
-      background: var(--accent-orange);
+      background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%);
       color: white;
-      box-shadow: 0 4px 14px rgba(255, 155, 68, 0.4);
+      box-shadow: 0 4px 15px rgba(255, 155, 68, 0.3);
     }
-    .btn-primary:hover { transform: translateY(-2px); background: #e08332; }
+    .btn-primary:hover { 
+      transform: translateY(-3px); 
+      box-shadow: 0 8px 25px rgba(255, 155, 68, 0.4); 
+    }
 
     .btn-outline {
-      border: 2px solid white;
+      border: 2px solid rgba(255,255,255,0.8);
       color: white;
       background: transparent;
     }
-    .btn-outline:hover { background: white; color: var(--primary-blue); }
+    .btn-outline:hover { 
+      background: white; 
+      color: var(--primary-navy); 
+      border-color: white;
+    }
 
-    /* --- 3. HERO SECTION (Banner) --- */
+    /* --- 3. DYNAMIC HERO SECTION --- */
     .hero {
-      height: 100vh; /* Full viewport height */
-      min-height: 600px;
-      /* Background Image with Dark Overlay */
-      background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.7)), 
-                  url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed; /* Parallax effect */
+      height: 100vh;
+      min-height: 650px;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       color: white;
-      padding-top: 60px;
+      padding-top: 80px;
+      overflow: hidden;
     }
 
-    .hero-content { max-width: 800px; padding: 20px; animation: fadeInUp 1s ease; }
+    /* Overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.7));
+      z-index: 2;
+    }
+
+    /* Background Slider Container */
+    .hero-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1s ease-in-out;
+      z-index: 1;
+      transform: scale(1.05); /* Slight zoom for parallax feel */
+      animation: breathe 20s infinite alternate;
+    }
+
+    @keyframes breathe {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+
+    .hero-content { 
+      position: relative; 
+      z-index: 3; 
+      max-width: 850px; 
+      padding: 20px; 
+      animation: fadeInUp 1s ease-out;
+    }
     
     .hero h1 {
-      font-size: 3.5rem;
-      line-height: 1.2;
-      margin-bottom: 20px;
+      font-size: 4rem;
+      line-height: 1.1;
+      margin-bottom: 25px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+    
+    .hero p { 
+      font-size: 1.25rem; 
+      margin-bottom: 40px; 
+      opacity: 0.9; 
+      font-weight: 300;
+    }
+    
+    .hero-btns { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+    /* --- 4. LAYOUT UTILITIES --- */
+    .section-padding { padding: 100px 5%; }
+    
+    .section-header { text-align: center; margin-bottom: 70px; }
+    .section-header .tagline {
+      color: var(--accent-orange);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 13px;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .section-header h2 { 
+      font-size: 2.8rem; 
+      color: var(--primary-navy); 
+      margin-bottom: 15px; 
       font-weight: 700;
     }
-    .hero p { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; }
-    .hero-btns { display: flex; gap: 15px; justify-content: center; }
+    .section-header p { 
+      color: var(--text-muted); 
+      max-width: 600px; 
+      margin: 0 auto; 
+      font-size: 1.1rem;
+    }
 
-    /* --- 4. FEATURES GRID --- */
-    .section-padding { padding: 80px 5%; }
-    .section-header { text-align: center; margin-bottom: 50px; }
-    .section-header h2 { font-size: 2.5rem; color: var(--primary-blue); margin-bottom: 10px; }
-    .section-header p { color: var(--text-light); max-width: 600px; margin: 0 auto; }
-
+    /* --- 5. FEATURES GRID --- */
     .grid-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
     }
 
     .feature-card {
       background: white;
       padding: 40px 30px;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-      transition: 0.3s;
+      border-radius: var(--radius-lg);
+      transition: var(--transition);
+      border: 1px solid #f1f5f9;
       position: relative;
       overflow: hidden;
+      z-index: 1;
+    }
+
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 0; height: 100%;
+      background: var(--bg-light);
+      z-index: -1;
+      transition: var(--transition);
     }
 
     .feature-card:hover {
-      box-shadow: var(--shadow);
-      transform: translateY(-5px);
-      border-color: var(--accent-orange);
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
     }
+    .feature-card:hover::after { width: 100%; }
 
     .icon-box {
-      width: 60px;
-      height: 60px;
-      background: rgba(255, 155, 68, 0.1);
-      border-radius: 12px;
+      width: 70px;
+      height: 70px;
+      background: #fff0e3;
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 28px;
       color: var(--accent-orange);
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      transition: var(--transition);
     }
-
-    .feature-card h3 { margin-bottom: 10px; color: var(--primary-blue); }
-    .feature-card p { color: var(--text-light); font-size: 0.95rem; }
-
-    /* --- 5. ANNOUNCEMENTS SECTION --- */
-    .bg-light { background-color: var(--bg-light); }
     
-    .announcement-wrapper {
-      max-width: 800px;
+    .feature-card:hover .icon-box { background: var(--accent-orange); color: white; transform: rotateY(180deg); }
+
+    .feature-card h3 { margin-bottom: 15px; color: var(--primary-navy); font-size: 1.35rem; }
+    .feature-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; }
+
+    /* --- 6. STATS SECTION (NEW) --- */
+    .stats-section {
+      background: var(--primary-navy);
+      padding: 60px 5%;
+      color: white;
+      text-align: center;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      max-width: 1200px;
       margin: 0 auto;
     }
+    .stat-item h2 { font-size: 3rem; color: var(--accent-orange); font-weight: 700; margin-bottom: 5px; }
+    .stat-item p { font-size: 1rem; opacity: 0.8; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* --- 7. HOW IT WORKS (NEW) --- */
+    .bg-light { background-color: var(--bg-light); }
+    
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      counter-reset: step;
+    }
+    
+    .step-card {
+      text-align: center;
+      padding: 30px;
+      position: relative;
+    }
+    
+    .step-number {
+      width: 50px; height: 50px;
+      background: var(--accent-orange);
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 10px rgba(255, 155, 68, 0.4);
+    }
+
+    /* --- 8. ANNOUNCEMENTS --- */
+    .announcement-wrapper { max-width: 900px; margin: 0 auto; }
     
     .announcement-card {
       background: white;
-      padding: 25px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      border-left: 5px solid var(--accent-orange);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-      transition: 0.3s;
+      padding: 30px;
+      border-radius: var(--radius-md);
+      margin-bottom: 25px;
+      border-left: 6px solid var(--accent-orange);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
     }
-    .announcement-card:hover { box-shadow: var(--shadow); }
-    .announcement-date { font-size: 0.85rem; color: #94a3b8; margin-top: 10px; display: block; }
+    .announcement-card:hover { transform: translateX(5px); box-shadow: var(--shadow-lg); }
+    
+    .announcement-date { 
+      font-size: 0.8rem; 
+      color: var(--text-muted); 
+      margin-top: 15px; 
+      display: flex; 
+      align-items: center; 
+      gap: 5px; 
+      background: #f1f5f9;
+      width: fit-content;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
 
-    /* --- 6. ABOUT / SHOWCASE --- */
+    /* --- 9. SHOWCASE / ABOUT --- */
     .showcase-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 50px;
+      gap: 80px;
       align-items: center;
     }
 
+    .showcase-img { position: relative; }
     .showcase-img img {
       width: 100%;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 5px solid white;
     }
-
-    .check-list li {
-      margin-bottom: 15px;
+    /* Floating badge on image */
+    .floating-badge {
+      position: absolute;
+      bottom: -30px;
+      left: -30px;
+      background: white;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
       display: flex;
       align-items: center;
-      gap: 10px;
-      color: var(--text-dark);
+      gap: 15px;
+    }
+    .floating-badge i { font-size: 30px; color: #10b981; }
+    .floating-badge div strong { display: block; color: var(--primary-navy); font-size: 1.2rem; }
+
+    .check-list li {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: var(--text-main);
       font-weight: 500;
+      font-size: 1.05rem;
     }
-    .check-list i { color: var(--accent-orange); }
+    .check-list i { color: var(--accent-orange); font-size: 1.2rem; background: #fff0e3; padding: 5px; border-radius: 50%; }
 
-    /* --- 7. FOOTER --- */
+    /* --- 10. FOOTER --- */
     footer {
-      background: var(--primary-blue);
-      color: white;
-      padding: 40px 5%;
-      text-align: center;
-      border-top: 4px solid var(--accent-orange);
+      background: var(--primary-navy);
+      color: #cbd5e1;
+      padding: 80px 5% 30px;
+      position: relative;
     }
 
-    /* Responsive */
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .footer-col h3 { color: white; margin-bottom: 25px; font-size: 1.2rem; }
+    .footer-col p { margin-bottom: 20px; font-size: 0.95rem; }
+    
+    .footer-links li { margin-bottom: 12px; }
+    .footer-links a { color: #cbd5e1; transition: 0.2s; }
+    .footer-links a:hover { color: var(--accent-orange); padding-left: 5px; }
+
+    .social-icons { display: flex; gap: 15px; }
+    .social-icons a {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      color: white;
+      transition: 0.3s;
+    }
+    .social-icons a:hover { background: var(--accent-orange); transform: translateY(-3px); }
+
+    .copyright {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 30px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .updates-split {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .updates-image img {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 5px solid white;
+    }
+
+    /* --- RESPONSIVE MEDIA QUERIES --- */
+    @media (max-width: 1024px) {
+      .hero h1 { font-size: 3.5rem; }
+      .showcase-grid { grid-template-columns: 1fr; gap: 50px; }
+      .floating-badge { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
     @media (max-width: 768px) {
       .hero h1 { font-size: 2.5rem; }
-      .nav-links { display: none; } /* Simplified for mobile */
-      .showcase-grid { grid-template-columns: 1fr; }
+      .hero-content { padding-top: 50px; }
+      
+      .nav-links { 
+        position: fixed;
+        top: 0; right: -100%;
+        width: 80%;
+        height: 100vh;
+        background: white;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        transition: 0.4s ease;
+        z-index: 1001;
+      }
+      .nav-links.active { right: 0; }
+      
+      .menu-toggle { display: block; font-size: 24px; cursor: pointer; color: var(--primary-navy); z-index: 1002; }
+      
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      
+      /* Close button for mobile menu */
+      .mobile-close { display: block; position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; }
+
+      #announcements.section-padding { padding: 70px 5%; }
+      .updates-split { grid-template-columns: 1fr; gap: 20px; }
+      .updates-image img { 
+        aspect-ratio: 16 / 9; 
+        height: auto; 
+        border-radius: var(--radius-md); 
+        border: 3px solid white; 
+        box-shadow: var(--shadow-sm); 
+      }
+      .updates-list .announcement-wrapper { max-width: 100%; }
+      .updates-list .announcement-card { padding: 20px; margin-bottom: 15px; border-left-width: 4px; }
+      .updates-list .announcement-date { font-size: 0.8rem; }
+    }
+    
+    @media (min-width: 769px) {
+      .menu-toggle, .mobile-close { display: none; }
     }
 
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
+      from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
@@ -230,12 +512,18 @@
 <body>
 
   <nav class="navbar">
-    <div class="logo">
-      <img src="/img/EM.png" alt="ELMS Logo" style="height:36px; width:auto; border-radius:50%; object-fit:contain;" onerror="this.style.display='none'">
-      ELMS Portal
-    </div>
+   <div class="logo">
+  <img src="/img/EM.png" alt="Company Logo"
+       style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+  EMS Portal
+</div>
+    
+    <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+    
     <ul class="nav-links">
+      <i class="fas fa-times mobile-close"></i>
       <li><a href="#features">Features</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
       <li><a href="#announcements">News</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="/login" class="btn btn-primary" id="nav-login-btn">Login Portal</a></li>
@@ -243,109 +531,268 @@
   </nav>
 
   <header class="hero">
+    <div class="hero-bg" id="hero-slider"></div>
+    
     <div class="hero-content">
-      <h1>Manage Your Workforce <br> <span style="color: var(--accent-orange);">Efficiently & Securely</span></h1>
-      <p>The all-in-one solution for employee tracking, leave management, and organizational analytics. Designed for modern companies.</p>
+      <h1>Manage Your Workforce <br> <span style="color: var(--accent-orange);">Simpler, Faster, Better.</span></h1>
+      <p>The all-in-one Enterprise Management System designed to streamline HR operations, track attendance, and boost organizational productivity.</p>
       <div class="hero-btns">
-        <a href="/login" class="btn btn-primary">Get Started Now</a>
+        <a href="/login" class="btn btn-primary"><i class="fas fa-rocket"></i> Get Started Now</a>
         <a href="#features" class="btn btn-outline">Explore Features</a>
       </div>
     </div>
   </header>
 
-  <section id="features" class="section-padding">
+  <div class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <h2>10k+</h2>
+        <p>Active Users</p>
+      </div>
+      <div class="stat-item">
+        <h2>99.9%</h2>
+        <p>System Uptime</p>
+      </div>
+      <div class="stat-item">
+        <h2>50+</h2>
+        <p>Countries</p>
+      </div>
+      <div class="stat-item">
+        <h2>24/7</h2>
+        <p>Support</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="features" class="section-padding bg-light">
     <div class="section-header">
+      <span class="tagline">Our Capabilities</span>
       <h2>Why Choose EMS?</h2>
-      <p>We provide the tools you need to streamline HR operations and boost productivity.</p>
+      <p>We provide the comprehensive tools you need to streamline HR operations and boost overall productivity.</p>
     </div>
     
     <div class="grid-container">
       <div class="feature-card">
-        <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
-        <h3>Role-Based Security</h3>
-        <p>Granular access controls for Admins, Managers, and Employees ensure data privacy and security at every level.</p>
+        <div class="icon-box"><i class="fas fa-user-shield"></i></div>
+        <h3>Role-Based Access</h3>
+        <p>Granular access controls for Admins, Managers, and Employees ensure data privacy and security at every level of the organization.</p>
       </div>
 
       <div class="feature-card">
-        <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
-        <h3>Leave Management</h3>
-        <p>Automated leave tracking, balance calculations, and approval workflows. Say goodbye to spreadsheets.</p>
+        <div class="icon-box"><i class="fas fa-clock"></i></div>
+        <h3>Smart Leave Tracking</h3>
+        <p>Automated leave tracking, balance calculations, and seamless approval workflows. Say goodbye to messy spreadsheets forever.</p>
       </div>
 
       <div class="feature-card">
         <div class="icon-box"><i class="fas fa-chart-pie"></i></div>
         <h3>Real-Time Analytics</h3>
-        <p>Visualize departmental strength, attendance trends, and pending requests with our interactive dashboards.</p>
+        <p>Visualize departmental strength, attendance trends, and pending requests with our interactive, real-time data dashboards.</p>
       </div>
 
       <div class="feature-card">
-        <div class="icon-box"><i class="fas fa-bullhorn"></i></div>
-        <h3>Company Announcements</h3>
-        <p>Keep your entire team aligned with a centralized notice board accessible to all employees instantly.</p>
+        <div class="icon-box"><i class="fas fa-bell"></i></div>
+        <h3>Instant Announcements</h3>
+        <p>Keep your entire team aligned. Post company-wide updates to a centralized notice board accessible to all employees instantly.</p>
       </div>
     </div>
   </section>
 
-  <section id="announcements" class="section-padding">
+  <section id="how-it-works" class="section-padding">
     <div class="section-header">
-      <h2>Latest Updates</h2>
-      <p>Stay informed with the latest company news.</p>
+      <span class="tagline">Workflow</span>
+      <h2>How It Works</h2>
+      <p>Getting started with EMS is as easy as 1-2-3.</p>
     </div>
-    <div id="announcement-list" class="announcement-wrapper">
-      <p style="text-align:center;">Loading announcements...</p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Create Accounts</h3>
+        <p>Admins set up the organization structure and invite managers and employees via email.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Assign Roles</h3>
+        <p>Define clear hierarchies. Managers oversee departments, while employees access self-service portals.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Start Managing</h3>
+        <p>Begin tracking attendance, approving leaves, and analyzing data immediately.</p>
+      </div>
     </div>
   </section>
 
   <section id="about" class="section-padding bg-light">
     <div class="showcase-grid">
       <div class="showcase-text">
-        <h4 style="color: var(--accent-orange); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">The Platform</h4>
-        <h2 style="font-size: 2.2rem; color: var(--primary-blue); margin-bottom: 20px;">Designed for Clarity</h2>
-        <p style="margin-bottom: 20px; color: var(--text-light);">
+        <span class="tagline">The Platform</span>
+        <h2 style="font-size: 2.5rem; color: var(--primary-navy); margin-bottom: 20px;">Designed for Clarity & Speed</h2>
+        <p style="margin-bottom: 25px; color: var(--text-muted);">
           Our EMS creates a seamless bridge between management and staff. We prioritize user experience, ensuring that complex HR tasks become simple clicks.
         </p>
         <ul class="check-list">
-          <li><i class="fas fa-check-circle"></i> Responsive Mobile-First Design</li>
-          <li><i class="fas fa-check-circle"></i> Fast & Secure Database</li>
-          <li><i class="fas fa-check-circle"></i> 24/7 System Availability</li>
+          <li><i class="fas fa-check"></i> Fully Responsive Mobile-First Design</li>
+          <li><i class="fas fa-check"></i> Encryption at Rest and in Transit</li>
+          <li><i class="fas fa-check"></i> Seamless Payroll Integration Ready</li>
+          <li><i class="fas fa-check"></i> Automated Email Notifications</li>
         </ul>
+        <a href="/login" class="btn btn-primary" style="margin-top: 30px;">See It In Action</a>
       </div>
+      
       <div class="showcase-img">
-        <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Dashboard Preview">
+        <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Office Environment">
+        <div class="floating-badge">
+          <i class="fas fa-check-circle"></i>
+          <div>
+            <strong>Verified Secure</strong>
+            <span style="font-size: 0.8rem; color: #666;">ISO 27001 Certified</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  
+  <section id="announcements" class="section-padding">
+    <div class="section-header">
+      <span class="tagline">Notice Board</span>
+      <h2>Latest Company Updates</h2>
+    </div>
+    <div class="updates-split">
+      <div class="updates-image">
+        <img src="https://www.niyogin.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FMediaResources_image.df283118.png&w=1920&q=75" alt="Latest Updates">
+      </div>
+      <div class="updates-list">
+        <div id="announcement-list" class="announcement-wrapper">
+          <p style="text-align:center; color: #999;">Loading announcements...</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <footer>
-    <div class="container">
-      <h3>EMS Portal</h3>
-      <p style="margin: 10px 0 20px; opacity: 0.8;">Simplifying employee management for the future.</p>
-      <p>&copy; 2026 Employee Management System. All rights reserved.</p>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="color: white; margin-bottom: 20px;">
+          <i class="fa-solid fa-layer-group"></i> EMS Portal
+        </div>
+        <p>Simplifying employee management for the modern workforce. Efficient, secure, and reliable.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h3>Support</h3>
+        <ul class="footer-links">
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Contact Support</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Contact Us</h3>
+        <ul class="footer-links">
+          <li><i class="fas fa-map-marker-alt" style="margin-right:10px; color:var(--accent-orange)"></i> 123 Business Park, Tech City</li>
+          <li><i class="fas fa-phone" style="margin-right:10px; color:var(--accent-orange)"></i> +91 XXXX XXXX XX</li>
+          <li><i class="fas fa-envelope" style="margin-right:10px; color:var(--accent-orange)"></i> support@ems-portal.com</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      &copy; 2026 Employee Management System. All rights reserved.
     </div>
   </footer>
 
   <script>
-    // 1. Auth Check: Change Login Button to "Dashboard" if logged in
+    /* --- 1. HERO IMAGE SLIDER LOGIC --- */
+    const heroBg = document.getElementById('hero-slider');
+    const images = [
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80', // Office
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80', // Team
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'  // Building
+    ];
+    
+    let currentIndex = 0;
+
+    // Set initial image
+    heroBg.style.backgroundImage = `url('${images[0]}')`;
+
+    function changeHeroImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      heroBg.style.backgroundImage = `url('${images[currentIndex]}')`;
+    }
+
+    // Change image every 5 seconds
+    setInterval(changeHeroImage, 5000);
+
+
+    /* --- 2. NAVBAR SCROLL EFFECT --- */
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+
+    /* --- 3. MOBILE MENU TOGGLE --- */
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mobileClose = document.querySelector('.mobile-close');
+    const navLinks = document.querySelector('.nav-links');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.add('active');
+    });
+
+    mobileClose.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+      });
+    });
+
+
+    /* --- 4. AUTH & ANNOUNCEMENTS (Existing Logic) --- */
     document.addEventListener('DOMContentLoaded', () => {
       const token = localStorage.getItem('token');
       const role = localStorage.getItem('role');
       
+      // Update Login Button if user is logged in
       if (token && role) {
         const loginBtns = document.querySelectorAll('a[href="/login"]');
         loginBtns.forEach(btn => {
-          btn.textContent = 'Go to Dashboard';
+          btn.innerHTML = `<i class="fas fa-tachometer-alt"></i> Go to Dashboard`;
           btn.href = `/${role.toLowerCase()}`;
-          // Add a logout helper style if needed
         });
       }
       
-      // Load announcements
       loadAnnouncements();
     });
 
-    // 2. Load Announcements Function
     async function loadAnnouncements() {
       const list = document.getElementById('announcement-list');
       try {
@@ -353,22 +800,29 @@
         const announcements = await res.json();
         
         if (!announcements || announcements.length === 0) {
-          list.innerHTML = '<p style="text-align:center; color:#64748b; background:#f1f5f9; padding:20px; border-radius:8px;">No recent announcements posted.</p>';
+          list.innerHTML = `
+            <div style="text-align:center; padding:40px; background:#f8fafc; border-radius:12px; border:1px dashed #cbd5e1;">
+              <i class="far fa-newspaper" style="font-size:40px; color:#cbd5e1; margin-bottom:15px;"></i>
+              <p style="color:#64748b;">No recent announcements posted.</p>
+            </div>`;
           return;
         }
 
         list.innerHTML = announcements.map(a => `
           <div class="announcement-card">
-            <h3 style="color: #0f172a; font-size: 1.1rem;">${a.title}</h3>
-            <p style="color: #475569; margin-top: 5px;">${a.content}</p>
+            <h3 style="color: #0f172a; font-size: 1.2rem; font-weight:600;">${a.title}</h3>
+            <p style="color: #475569; margin-top: 10px; line-height:1.6;">${a.content}</p>
             <small class="announcement-date">
-              <i class="far fa-clock"></i> Posted on ${new Date(a.createdAt).toLocaleDateString()}
+              <i class="far fa-calendar-alt"></i> ${new Date(a.createdAt).toLocaleDateString()}
             </small>
           </div>
         `).join('');
       } catch (err) {
         console.error('Failed to load announcements', err);
-        list.innerHTML = '<p style="text-align:center; color:#ef4444;">Unable to load announcements at this time.</p>';
+        list.innerHTML = `
+          <div style="text-align:center; padding:20px; color:#ef4444;">
+             <i class="fas fa-exclamation-circle"></i> Unable to load announcements.
+          </div>`;
       }
     }
   </script>
