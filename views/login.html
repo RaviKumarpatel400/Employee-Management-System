@@ -233,6 +233,36 @@
         <a href="/forgot">Forgot Password?</a>
       </div>
 
+      <div style="margin-top:20px; background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:16px;">
+        <h3 style="margin:0 0 10px 0; font-size:1rem; color:#0f172a;">Demo Accounts</h3>
+        <div style="display:grid; grid-template-columns: 1fr; gap:10px;">
+          <div style="background:white; border:1px solid #e5e7eb; border-radius:10px; padding:12px; display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <div style="font-weight:600; color:#0f172a;">Admin</div>
+              <div style="font-size:0.9rem; color:#64748b;">Email: admin.demo@company.com</div>
+              <div style="font-size:0.9rem; color:#64748b;">Password: Demo@123</div>
+            </div>
+            <button class="btn" style="width:auto; padding:8px 12px;" id="fill-admin">Fill</button>
+          </div>
+          <div style="background:white; border:1px solid #e5e7eb; border-radius:10px; padding:12px; display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <div style="font-weight:600; color:#0f172a;">Manager</div>
+              <div style="font-size:0.9rem; color:#64748b;">Email: manager.demo@company.com</div>
+              <div style="font-size:0.9rem; color:#64748b;">Password: Demo@123</div>
+            </div>
+            <button class="btn" style="width:auto; padding:8px 12px;" id="fill-manager">Fill</button>
+          </div>
+          <div style="background:white; border:1px solid #e5e7eb; border-radius:10px; padding:12px; display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <div style="font-weight:600; color:#0f172a;">Employee</div>
+              <div style="font-size:0.9rem; color:#64748b;">Email: employee.demo@company.com</div>
+              <div style="font-size:0.9rem; color:#64748b;">Password: Demo@123</div>
+            </div>
+            <button class="btn" style="width:auto; padding:8px 12px;" id="fill-employee">Fill</button>
+          </div>
+        </div>
+      </div>
+
       <div class="login-footer">
         <p>&copy; 2026 EMS Corp. All rights reserved.</p>
         <p style="margin-top: 5px;">Need help? <a href="#">Contact Support</a></p>
@@ -262,6 +292,15 @@
 
       // Start the loop
       setInterval(nextSlide, slideInterval);
+      
+      const emailInput = document.getElementById('email');
+      const passInput = document.getElementById('password');
+      const fillAdmin = document.getElementById('fill-admin');
+      const fillManager = document.getElementById('fill-manager');
+      const fillEmployee = document.getElementById('fill-employee');
+      if (fillAdmin) fillAdmin.addEventListener('click', () => { emailInput.value = 'admin.demo@company.com'; passInput.value = 'Demo@123'; });
+      if (fillManager) fillManager.addEventListener('click', () => { emailInput.value = 'manager.demo@company.com'; passInput.value = 'Demo@123'; });
+      if (fillEmployee) fillEmployee.addEventListener('click', () => { emailInput.value = 'employee.demo@company.com'; passInput.value = 'Demo@123'; });
     });
   </script>
 

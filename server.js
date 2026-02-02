@@ -5,6 +5,7 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const Announcement = require('./models/Announcement');
+const LeaveBalance = require('./models/LeaveBalance');
 
 dotenv.config();
 
@@ -58,6 +59,66 @@ const seedAdmin = async () => {
   }
 };
 seedAdmin();
+
+const seedDemoUsers = async () => {
+  try {
+    const demoAdminEmail = 'admin.demo@company.com';
+    const demoManagerEmail = 'manager.demo@company.com';
+    const demoEmployeeEmail = 'employee.demo@company.com';
+    const demoPassword = 'Demo@123';
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(demoPassword, salt);
+
+    let demoAdmin = await User.findOne({ email: demoAdminEmail });
+    if (!demoAdmin) {
+      demoAdmin = new User({
+        name: 'Demo Admin',
+        email: demoAdminEmail,
+        password: hashed,
+        role: 'Admin',
+        firstLogin: false
+      });
+      await demoAdmin.save();
+      console.log('Seeded Demo Admin:', demoAdminEmail);
+    }
+
+    let demoManager = await User.findOne({ email: demoManagerEmail });
+    if (!demoManager) {
+      demoManager = new User({
+        name: 'Demo Manager',
+        email: demoManagerEmail,
+        password: hashed,
+        role: 'Manager',
+        department: 'HR',
+        firstLogin: false
+      });
+      await demoManager.save();
+      console.log('Seeded Demo Manager:', demoManagerEmail);
+    }
+
+    let demoEmployee = await User.findOne({ email: demoEmployeeEmail });
+    if (!demoEmployee) {
+      const employeeId = `EMP-${Math.floor(1000 + Math.random() * 9000)}`;
+      demoEmployee = new User({
+        name: 'Demo Employee',
+        email: demoEmployeeEmail,
+        password: hashed,
+        role: 'Employee',
+        department: 'HR',
+        managerId: demoManager._id,
+        employeeId,
+        firstLogin: false
+      });
+      await demoEmployee.save();
+      const balance = new LeaveBalance({ employeeId: demoEmployee._id });
+      await balance.save();
+      console.log('Seeded Demo Employee:', demoEmployeeEmail, employeeId);
+    }
+  } catch (err) {
+    console.error('Demo seed error:', err && err.message ? err.message : err);
+  }
+};
+seedDemoUsers();
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
