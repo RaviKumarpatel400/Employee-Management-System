@@ -188,6 +188,14 @@
         </div>
         
         <div class="form-group">
+          <label>Previous Password</label>
+          <div class="input-box">
+            <i class="fa-solid fa-key"></i>
+            <input type="password" id="fp-old" required minlength="6" placeholder="Enter your current password">
+          </div>
+        </div>
+
+        <div class="form-group">
           <label>New Password</label>
           <div class="input-box">
             <i class="fa-solid fa-lock"></i>
@@ -231,6 +239,7 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('fp-email').value;
+      const oldPassword = document.getElementById('fp-old').value;
       const password = document.getElementById('fp-password').value;
       const confirm = document.getElementById('fp-confirm').value;
       const error = document.getElementById('fp-error');
@@ -238,6 +247,10 @@
       error.textContent = '';
       
       // Visual validation feedback
+      if (!oldPassword || oldPassword.length < 6) {
+        error.textContent = 'Previous password is required';
+        return;
+      }
       if (password !== confirm) {
         error.textContent = 'Passwords do not match';
         return;
@@ -254,7 +267,7 @@
         const res = await fetch('/api/auth/forgot-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, newPassword: password })
+          body: JSON.stringify({ email, newPassword: password, oldPassword })
         });
         const data = await res.json();
         

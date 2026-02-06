@@ -71,13 +71,19 @@ router.post('/change-password', authenticateToken, async (req, res) => {
 
 router.post('/forgot-password', async (req, res) => {
   try {
-    const { email, newPassword } = req.body;
+    const { email, newPassword, oldPassword } = req.body;
     if (!email || !newPassword || newPassword.length < 6) {
       return res.status(400).json({ message: 'Invalid input' });
     }
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+    if (oldPassword) {
+      const matches = await bcrypt.compare(oldPassword, user.password);
+      if (!matches) {
+        return res.status(400).json({ message: 'Previous password is incorrect' });
+      }
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
